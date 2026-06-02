@@ -13,7 +13,7 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization', 'Accept']
 }));
 app.options('/*path', cors());
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8080;
 
 // Middlewares globais
 app.use(express.json());
@@ -29,7 +29,7 @@ app.use('/api', routes);
 // Error handler (deve ser o último middleware)
 app.use(errorHandler);
 
-app.listen(PORT, () => {
-  console.log(`🚀 Backend rodando em http://localhost:${PORT}`);
-  console.log(`📡 API disponível em http://localhost:${PORT}/api`);
+app.listen(Number(PORT), '0.0.0.0', () => {
+  console.log(`🚀 Backend rodando na porta ${PORT} em todas as interfaces`);
+  console.log(`📡 API disponível no path /api`);
 });

@@ -6,7 +6,7 @@ export class OrdersService {
   async findAll() {
     const { data, error } = await supabase
       .from(TABLE)
-      .select('*, clients(*, people(*)), driver:driver_id(*)')
+      .select('*, clients(*, people(*)), delivery_drivers:delivery_driver_id(*, people(*))')
       .order('created_at', { ascending: false });
 
     if (error) throw error;
@@ -16,7 +16,7 @@ export class OrdersService {
   async findById(id: string) {
     const { data, error } = await supabase
       .from(TABLE)
-      .select('*, clients(*, people(*)), driver:driver_id(*)')
+      .select('*, clients(*, people(*)), delivery_drivers:delivery_driver_id(*, people(*))')
       .eq('id', id)
       .single();
 
@@ -28,7 +28,7 @@ export class OrdersService {
     const { data, error } = await supabase
       .from(TABLE)
       .insert(payload)
-      .select()
+      .select('*, clients(*, people(*)), delivery_drivers:delivery_driver_id(*, people(*))')
       .single();
 
     if (error) throw error;
@@ -40,7 +40,7 @@ export class OrdersService {
       .from(TABLE)
       .update(payload)
       .eq('id', id)
-      .select()
+      .select('*, clients(*, people(*)), delivery_drivers:delivery_driver_id(*, people(*))')
       .single();
 
     if (error) throw error;

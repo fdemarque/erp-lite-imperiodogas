@@ -26,6 +26,10 @@ export class PedidosComponent implements OnInit {
   formatDate = formatDate;
   search = '';
   isNewOrderOpen = signal(false);
+
+  openNewOrderModal() {
+    this.isNewOrderOpen.set(true);
+  }
   viewingOrder = signal<Order | null>(null);
 
   orders = signal<Order[]>([]);

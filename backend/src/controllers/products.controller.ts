@@ -7,7 +7,7 @@ export class ProductsController {
   async getAll(_req: Request, res: Response, next: NextFunction) {
     try {
       const data = await service.findAll();
-      res.json({ success: true, data });
+      res.status(200).json({ success: true, data });
     } catch (err) {
       next(err);
     }

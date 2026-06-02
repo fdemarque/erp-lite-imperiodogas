@@ -55,7 +55,10 @@ export class EntradasComponent implements OnInit {
 
   loadProducts() {
     this.productService.getAll().subscribe((data) => {
-      this.products.set(data);
+      if (!data || data.length === 0) {
+        console.log('Nenhum produto retornado da API. O banco pode estar vazio.');
+      }
+      this.products.set(data || []);
     });
   }
 
