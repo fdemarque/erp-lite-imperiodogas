@@ -1,8 +1,8 @@
 import { Router } from 'express';
-import { ClientsController } from '../controllers/clients.controller';
+import { ProductsController } from '../controllers/products.controller';
 
 const router = Router();
-const controller = new ClientsController();
+const controller = new ProductsController();
 
 router.get('/', controller.getAll);
 router.get('/:id', controller.getById);

@@ -101,7 +101,7 @@
             </div>
             <div class="space-y-2">
               <label class="text-slate-600 block font-medium text-sm">Documento</label>
-              <input class="w-full h-10 rounded-lg border border-slate-300 px-3 text-sm" [(ngModel)]="formData.document" />
+              <input mask="000.000.000-00||00.000.000/0000-00" class="w-full h-10 rounded-lg border border-slate-300 px-3 text-sm" [(ngModel)]="formData.document" />
             </div>
           </div>
           <div class="space-y-2">
@@ -117,7 +117,7 @@
           <div class="grid grid-cols-2 gap-4">
             <div class="space-y-2">
               <label class="text-slate-600 block font-medium text-sm">Telefone</label>
-              <input class="w-full h-10 rounded-lg border border-slate-300 px-3 text-sm" [(ngModel)]="formData.phone" />
+              <input mask="(00) 00000-0000" class="w-full h-10 rounded-lg border border-slate-300 px-3 text-sm" [(ngModel)]="formData.phone" />
             </div>
             <div class="space-y-2">
               <label class="text-slate-600 block font-medium text-sm">Prazo Pagamento (Dias)</label>

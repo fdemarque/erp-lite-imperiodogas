@@ -1,13 +1,13 @@
 import { supabase } from '../config/supabaseClient';
 
-const TABLE = 'clients';
+const TABLE = 'products';
 
-export class ClientsService {
+export class ProductsService {
   async findAll() {
     const { data, error } = await supabase
       .from(TABLE)
-      .select('*, people(*)')
-      .order('created_at', { ascending: false });
+      .select('*')
+      .order('name', { ascending: true });
 
     if (error) throw error;
     return data;
@@ -16,7 +16,7 @@ export class ClientsService {
   async findById(id: string) {
     const { data, error } = await supabase
       .from(TABLE)
-      .select('*, people(*)')
+      .select('*')
       .eq('id', id)
       .single();
 

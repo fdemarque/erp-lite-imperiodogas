@@ -1,0 +1,177 @@
+<div class="space-y-8">
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <div>
+      <h2 class="text-2xl font-bold tracking-tight text-slate-800 flex items-center gap-2 m-0">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+        </svg>
+        Estoque Consolidado
+      </h2>
+      <p class="text-slate-500 mt-1 mb-0">Controle de saldos e histórico de movimentações de produtos.</p>
+    </div>
+    @if (activeTab() === 'SALDO') {
+      <button (click)="handleOpenNewProduct()" class="rounded-lg h-10 px-4 shadow-sm text-base font-medium flex items-center gap-2 bg-slate-900 text-white hover:bg-slate-800 transition-colors cursor-pointer border-none">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" /></svg>
+        Novo Produto
+      </button>
+    }
+  </div>
+
+  <!-- Tabs -->
+  <div class="border-b border-slate-200">
+    <nav class="-mb-px flex space-x-8">
+      <button 
+        (click)="switchTab('SALDO')"
+        class="whitespace-nowrap pb-4 px-1 border-b-2 font-medium text-sm transition-colors cursor-pointer border-none bg-transparent"
+        [class]="activeTab() === 'SALDO' ? 'border-orange-500 text-orange-600' : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300'">
+        Saldos de Produtos
+      </button>
+      <button 
+        (click)="switchTab('HISTORICO')"
+        class="whitespace-nowrap pb-4 px-1 border-b-2 font-medium text-sm transition-colors cursor-pointer border-none bg-transparent"
+        [class]="activeTab() === 'HISTORICO' ? 'border-orange-500 text-orange-600' : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300'">
+        Extrato e Movimentações
+      </button>
+    </nav>
+  </div>
+
+  <!-- Content -->
+  @if (activeTab() === 'SALDO') {
+    <div class="bg-white border border-slate-100 shadow-sm rounded-2xl overflow-hidden">
+      <table class="w-full">
+        <thead>
+          <tr class="border-b border-slate-100 bg-slate-50/50">
+            <th class="text-left py-3 px-4 text-sm font-medium text-slate-500">Produto</th>
+            <th class="text-right py-3 px-4 text-sm font-medium text-slate-500">Saldo Consolidado (Físico)</th>
+          </tr>
+        </thead>
+        <tbody>
+          @if (balances().length === 0) {
+            <tr>
+              <td colspan="2" class="py-8 text-center text-slate-400">Nenhum produto cadastrado.</td>
+            </tr>
+          }
+          @for (item of balances(); track item.id) {
+            <tr class="border-b border-slate-50 hover:bg-slate-50/50 transition-colors">
+              <td class="py-3 px-4">
+                <p class="font-semibold text-slate-800 m-0">{{ item.name }}</p>
+              </td>
+              <td class="py-3 px-4 text-right">
+                <span class="inline-flex items-center justify-center px-3 py-1 rounded-full text-sm font-bold border" 
+                  [class]="item.balance > 0 ? 'bg-green-50 text-green-700 border-green-200' : (item.balance < 0 ? 'bg-red-50 text-red-700 border-red-200' : 'bg-slate-100 text-slate-600 border-slate-200')">
+                  {{ item.balance }}
+                </span>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  } @else {
+    <div class="bg-white border border-slate-100 shadow-sm rounded-2xl p-4">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6 items-end">
+        <div class="space-y-2">
+          <label class="text-slate-600 block text-xs font-medium uppercase tracking-wider">Nota Fiscal</label>
+          <input type="text" placeholder="Buscar por NF..." class="w-full h-10 rounded-lg border border-slate-200 px-3 text-sm" [(ngModel)]="filters.nf" (keyup.enter)="applyFilters()" />
+        </div>
+        <div class="space-y-2">
+          <label class="text-slate-600 block text-xs font-medium uppercase tracking-wider">Placa</label>
+          <input type="text" placeholder="AAA-0A00" class="w-full h-10 rounded-lg border border-slate-200 px-3 text-sm uppercase" [(ngModel)]="filters.truck_plate" (keyup.enter)="applyFilters()" />
+        </div>
+        <div class="space-y-2">
+          <label class="text-slate-600 block text-xs font-medium uppercase tracking-wider">Produto</label>
+          <select class="w-full h-10 rounded-lg border border-slate-200 px-3 text-sm" [(ngModel)]="filters.product_id" (change)="applyFilters()">
+            <option value="">Todos os Produtos</option>
+            @for (prod of productsList(); track prod.id) {
+              <option [value]="prod.id">{{ prod.name }}</option>
+            }
+          </select>
+        </div>
+        <div>
+          <button (click)="applyFilters()" class="h-10 px-4 w-full rounded-lg bg-orange-50 text-orange-600 hover:bg-orange-100 border border-orange-200 font-medium transition-colors cursor-pointer">
+            Filtrar
+          </button>
+        </div>
+      </div>
+
+      <div class="overflow-x-auto rounded-lg border border-slate-100">
+        <table class="w-full text-sm">
+          <thead class="bg-slate-50 border-b border-slate-100">
+            <tr>
+              <th class="text-left py-3 px-4 font-medium text-slate-500 whitespace-nowrap">Data</th>
+              <th class="text-left py-3 px-4 font-medium text-slate-500 whitespace-nowrap">Tipo</th>
+              <th class="text-left py-3 px-4 font-medium text-slate-500 whitespace-nowrap">Produto</th>
+              <th class="text-right py-3 px-4 font-medium text-slate-500 whitespace-nowrap">Qtd</th>
+              <th class="text-left py-3 px-4 font-medium text-slate-500 whitespace-nowrap">Referência</th>
+            </tr>
+          </thead>
+          <tbody>
+            @if (history().length === 0) {
+              <tr>
+                <td colspan="5" class="py-8 text-center text-slate-400">Nenhuma movimentação encontrada.</td>
+              </tr>
+            }
+            @for (mov of history(); track mov.id) {
+              <tr class="border-b border-slate-50 hover:bg-slate-50/50">
+                <td class="py-3 px-4 text-slate-600 whitespace-nowrap">{{ formatDate(mov.created_at) }}</td>
+                <td class="py-3 px-4">
+                  <span class="inline-block px-2 py-0.5 rounded text-xs font-bold border" [class]="getMovementClass(mov.movement_type)">
+                    {{ mov.movement_type }}
+                  </span>
+                </td>
+                <td class="py-3 px-4 font-medium text-slate-800">{{ mov.product_name }}</td>
+                <td class="py-3 px-4 text-right font-semibold" 
+                  [class]="mov.movement_type === 'ENTRADA' ? 'text-green-600' : 'text-orange-600'">
+                  {{ mov.movement_type === 'ENTRADA' ? '+' : '-' }}{{ mov.quantity }}
+                </td>
+                <td class="py-3 px-4 text-slate-500 text-xs">
+                  @if (mov.invoice_number) {
+                    <div class="font-medium text-slate-700">NF: {{ mov.invoice_number }}</div>
+                  }
+                  @if (mov.truck_plate) {
+                    <div class="uppercase">Placa: {{ mov.truck_plate }}</div>
+                  }
+                  @if (!mov.invoice_number && !mov.truck_plate) {
+                    <span>-</span>
+                  }
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  }
+
+  <!-- Modal Novo Produto -->
+  @if (isProductModalOpen()) {
+    <div class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" (click)="isProductModalOpen.set(false)">
+      <div class="bg-white rounded-2xl w-full max-w-[400px] shadow-xl" (click)="$event.stopPropagation()">
+        <div class="p-6 border-b border-slate-100">
+          <h3 class="text-lg font-semibold text-slate-800 m-0">Novo Produto</h3>
+        </div>
+        <div class="p-6 space-y-4">
+          <div class="space-y-2">
+            <label class="text-slate-600 block font-medium text-sm">Nome do Produto</label>
+            <input class="w-full h-10 rounded-lg border border-slate-300 px-3 text-sm" [(ngModel)]="productForm.name" placeholder="Ex: GLP 13kg" />
+          </div>
+          <div class="space-y-2">
+            <label class="text-slate-600 block font-medium text-sm">Preço Atual (R$)</label>
+            <input type="number" step="0.01" class="w-full h-10 rounded-lg border border-slate-300 px-3 text-sm" [(ngModel)]="productForm.current_price" />
+          </div>
+          <div class="space-y-2">
+            <label class="text-slate-600 block font-medium text-sm">Status</label>
+            <select class="w-full h-10 rounded-lg border border-slate-300 px-3 text-sm" [(ngModel)]="productForm.status">
+              <option value="ATIVO">Ativo</option>
+              <option value="INATIVO">Inativo</option>
+            </select>
+          </div>
+        </div>
+        <div class="p-6 border-t border-slate-100 flex justify-end gap-3">
+          <button (click)="isProductModalOpen.set(false)" class="rounded-full h-10 px-6 font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 cursor-pointer border-none">Cancelar</button>
+          <button (click)="handleSaveProduct()" class="rounded-full h-10 px-6 font-medium bg-slate-900 text-white hover:bg-slate-800 cursor-pointer border-none">Salvar</button>
+        </div>
+      </div>
+    </div>
+  }
+</div>

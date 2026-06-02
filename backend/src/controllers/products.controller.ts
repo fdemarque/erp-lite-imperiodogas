@@ -1,9 +1,9 @@
 import { Request, Response, NextFunction } from 'express';
-import { PeopleService } from '../services/people.service';
+import { ProductsService } from '../services/products.service';
 
-const service = new PeopleService();
+const service = new ProductsService();
 
-export class PeopleController {
+export class ProductsController {
   async getAll(_req: Request, res: Response, next: NextFunction) {
     try {
       const data = await service.findAll();
@@ -17,7 +17,7 @@ export class PeopleController {
     try {
       const data = await service.findById(req.params.id);
       if (!data) {
-        res.status(404).json({ success: false, error: 'Pessoa não encontrada' });
+        res.status(404).json({ success: false, error: 'Produto não encontrado' });
         return;
       }
       res.json({ success: true, data });

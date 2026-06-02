@@ -32,6 +32,16 @@ export const routes: Routes = [
       import('./pages/automacoes/automacoes.component').then((m) => m.AutomacoesComponent),
   },
   {
+    path: 'entradas',
+    loadComponent: () =>
+      import('./pages/entradas/entradas.component').then((m) => m.EntradasComponent),
+  },
+  {
+    path: 'estoque',
+    loadComponent: () =>
+      import('./pages/estoque/estoque.component').then((m) => m.EstoqueComponent),
+  },
+  {
     path: '**',
     redirectTo: 'dashboard',
   },

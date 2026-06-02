@@ -1,5 +1,6 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, OnInit, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { OrderService } from '../../services/order.service';
 import { formatCurrency, formatDate } from '../../utils/formatters';
 
 interface Order {
@@ -18,21 +19,38 @@ interface Order {
   imports: [FormsModule],
   templateUrl: './pedidos.component.html',
 })
-export class PedidosComponent {
+export class PedidosComponent implements OnInit {
+  private readonly orderService = inject(OrderService);
+
   formatCurrency = formatCurrency;
   formatDate = formatDate;
   search = '';
   isNewOrderOpen = signal(false);
   viewingOrder = signal<Order | null>(null);
 
-  orders = signal<Order[]>([
-    { id: 'ord1', client_name: 'João Carlos Silva', driver_name: 'Marcos Antonio', sale_type: 'A VISTA', status: 'FINALIZADO', total_amount: 115.0, created_at: '2023-11-20T10:30:00Z' },
-    { id: 'ord2', client_name: 'Restaurante Sabor de Minas', driver_name: 'Pedro Paulo', sale_type: 'A PRAZO', status: 'ABERTO', total_amount: 345.0, created_at: '2023-11-21T14:45:00Z' },
-    { id: 'ord3', client_name: 'Padaria Pão Quente', driver_name: undefined, sale_type: 'A VISTA', status: 'FINALIZADO', total_amount: 230.0, created_at: '2023-11-22T09:00:00Z' },
-  ]);
+  orders = signal<Order[]>([]);
 
   filteredOrders = signal<Order[]>([]);
-  constructor() { this.updateFiltered(); }
+
+  ngOnInit() {
+    this.loadOrders();
+  }
+
+  loadOrders() {
+    this.orderService.getAll().subscribe((data: any[]) => {
+      const mappedOrders: Order[] = data.map((o) => ({
+        id: o.id,
+        client_name: o.clients?.people?.name || o.clients?.trade_name || 'Desconhecido',
+        driver_name: o.driver?.name || 'Não atribuído',
+        sale_type: o.sale_type,
+        status: o.status,
+        total_amount: o.total_amount,
+        created_at: o.created_at,
+      }));
+      this.orders.set(mappedOrders);
+      this.updateFiltered();
+    });
+  }
 
   updateFiltered() {
     const s = this.search.toLowerCase();
