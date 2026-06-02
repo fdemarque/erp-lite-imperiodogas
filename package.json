@@ -9,6 +9,7 @@
     "dev:frontend": "npm --prefix frontend run start"
   },
   "devDependencies": {
+    "@angular/cli": "^21.2.13",
     "concurrently": "^9.2.1"
   }
 }
