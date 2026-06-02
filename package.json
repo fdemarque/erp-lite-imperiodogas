@@ -1,0 +1,14 @@
+{
+  "name": "erp-automacao",
+  "version": "1.0.0",
+  "private": true,
+  "description": "ERP Automação - Monorepo (Backend + Frontend)",
+  "scripts": {
+    "dev": "concurrently -n backend,frontend -c blue,green \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:backend": "npm --prefix backend run dev",
+    "dev:frontend": "npm --prefix frontend run start"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}

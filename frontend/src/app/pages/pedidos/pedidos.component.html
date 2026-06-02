@@ -1,0 +1,114 @@
+<div class="space-y-8">
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <div>
+      <h2 class="text-2xl font-bold tracking-tight text-slate-800 flex items-center gap-2 m-0">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+        Vendas e Pedidos
+      </h2>
+      <p class="text-slate-500 mt-1 mb-0">Gerencie ordens de serviço, vendas rápidas e entregas.</p>
+    </div>
+    <button (click)="isNewOrderOpen.set(true)" class="rounded-lg h-10 px-4 shadow-sm text-base font-medium flex items-center gap-2 bg-slate-900 text-white hover:bg-slate-800 transition-colors cursor-pointer border-none">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" /></svg>
+      Nova Venda
+    </button>
+  </div>
+
+  <!-- Search -->
+  <div class="bg-white border border-slate-100 shadow-sm rounded-2xl p-4">
+    <div class="flex-1 space-y-2 max-w-md">
+      <label class="text-slate-600 block text-sm">Buscar Vendas</label>
+      <div class="relative">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+        <input type="text" placeholder="Cliente, ID ou Entregador" class="w-full pl-10 pr-4 h-10 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-slate-400 text-sm" [(ngModel)]="search" (ngModelChange)="updateFiltered()" />
+      </div>
+    </div>
+  </div>
+
+  <!-- Table -->
+  <div class="bg-white border border-slate-100 shadow-sm rounded-2xl overflow-hidden">
+    <table class="w-full">
+      <thead>
+        <tr class="border-b border-slate-100">
+          <th class="text-left py-3 px-4 text-sm font-medium text-slate-500">ID / Data</th>
+          <th class="text-left py-3 px-4 text-sm font-medium text-slate-500">Cliente</th>
+          <th class="text-left py-3 px-4 text-sm font-medium text-slate-500">Entregador</th>
+          <th class="text-right py-3 px-4 text-sm font-medium text-slate-500">Valor</th>
+          <th class="text-center py-3 px-4 text-sm font-medium text-slate-500">Status</th>
+          <th class="text-right py-3 px-4 text-sm font-medium text-slate-500">Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (order of filteredOrders(); track order.id) {
+          <tr class="border-b border-slate-50 hover:bg-slate-50/50 transition-colors">
+            <td class="py-3 px-4">
+              <p class="font-semibold text-slate-800 m-0">#{{ order.id.slice(0, 6).toUpperCase() }}</p>
+              <p class="text-xs text-slate-500 m-0">{{ formatDate(order.created_at) }}</p>
+            </td>
+            <td class="py-3 px-4">
+              <span class="font-medium text-slate-700">{{ order.client_name || '-' }}</span>
+            </td>
+            <td class="py-3 px-4">
+              @if (order.driver_name) {
+                <span class="text-slate-600">{{ order.driver_name }}</span>
+              } @else {
+                <span class="text-slate-400 italic">Retirada</span>
+              }
+            </td>
+            <td class="py-3 px-4 text-right">
+              <p class="font-bold text-slate-800 m-0">{{ formatCurrency(order.total_amount) }}</p>
+              <p class="text-xs text-slate-500 m-0">{{ order.sale_type }}</p>
+            </td>
+            <td class="py-3 px-4 text-center">
+              <span class="inline-block px-2 py-0.5 rounded text-xs font-medium border" [class]="getStatusClass(order.status)">{{ getStatusLabel(order.status) }}</span>
+            </td>
+            <td class="py-3 px-4 text-right">
+              <button (click)="viewingOrder.set(order)" class="p-1.5 text-slate-400 hover:text-slate-600 cursor-pointer bg-transparent border-none">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <!-- View Details Modal -->
+  @if (viewingOrder()) {
+    <div class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" (click)="viewingOrder.set(null)">
+      <div class="bg-white rounded-2xl w-full max-w-[500px] shadow-xl" (click)="$event.stopPropagation()">
+        <div class="p-6 border-b border-slate-100">
+          <h3 class="text-lg font-semibold text-slate-800 m-0">Detalhes do Pedido</h3>
+        </div>
+        <div class="p-6 space-y-6">
+          <div class="flex justify-between items-start">
+            <div>
+              <p class="text-sm text-slate-500 m-0">Cliente</p>
+              <p class="font-semibold text-slate-800 m-0">{{ viewingOrder()!.client_name }}</p>
+            </div>
+            <div class="text-right">
+              <p class="text-sm text-slate-500 m-0">Data</p>
+              <p class="font-medium text-slate-800 m-0">{{ formatDate(viewingOrder()!.created_at) }}</p>
+            </div>
+          </div>
+          <div class="flex justify-between items-start">
+            <div>
+              <p class="text-sm text-slate-500 m-0">Modo</p>
+              <p class="font-medium text-slate-700 m-0">{{ viewingOrder()!.sale_type }}</p>
+            </div>
+            <div class="text-right">
+              <p class="text-sm text-slate-500 m-0">Entregador</p>
+              <p class="font-medium text-slate-700 m-0">{{ viewingOrder()!.driver_name || 'Retirada' }}</p>
+            </div>
+          </div>
+          <div class="flex justify-between items-center pt-4 border-t border-slate-100 mt-2">
+            <p class="text-slate-600 font-medium m-0">Total Geral</p>
+            <p class="text-xl font-bold text-orange-600 m-0">{{ formatCurrency(viewingOrder()!.total_amount) }}</p>
+          </div>
+        </div>
+        <div class="p-6 border-t border-slate-100">
+          <button (click)="viewingOrder.set(null)" class="w-full h-10 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium cursor-pointer border-none">Fechar</button>
+        </div>
+      </div>
+    </div>
+  }
+</div>
