@@ -7,8 +7,8 @@ import { environment } from '../../environments/environment';
 export interface Product {
   id: string;
   name: string;
-  current_price?: number;
-  status?: string;
+  preco_venda?: number;
+  active?: boolean;
 }
 
 interface ApiResponse<T> {

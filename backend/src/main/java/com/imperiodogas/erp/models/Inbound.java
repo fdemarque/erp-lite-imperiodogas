@@ -23,14 +23,20 @@ public class Inbound {
     @JsonProperty("truck_plate")
     private String truckPlate;
 
+    @Column(name = "status")
+    @JsonProperty("status")
     private String status;
 
-    @Column(name = "preco_custo")
-    @JsonProperty("preco_custo")
-    private java.math.BigDecimal precoCusto;
+    @Column(name = "total_amount")
+    @JsonProperty("totalAmount")
+    private java.math.BigDecimal totalAmount;
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     @JsonProperty("created_at")
     private LocalDateTime createdAt;
+
+    @OneToMany(mappedBy = "inbound", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonProperty("items")
+    private java.util.List<InboundItem> items = new java.util.ArrayList<>();
 }

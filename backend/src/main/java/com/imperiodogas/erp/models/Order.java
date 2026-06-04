@@ -19,6 +19,8 @@ public class Order {
     @JsonProperty("sale_type")
     private String saleType;
 
+    @Column(name = "status")
+    @JsonProperty("status")
     private String status;
 
     @Column(name = "total_amount")
@@ -35,10 +37,11 @@ public class Order {
     @JsonProperty("clients")
     private Client client;
 
-    @ManyToOne
-    @JoinColumn(name = "delivery_driver_id")
-    private Person driver;
+    @Column(name = "delivery_driver_id")
+    @JsonProperty("delivery_driver_id")
+    private UUID deliveryDriverId;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonProperty("items")
     private java.util.List<OrderItem> items;
 }

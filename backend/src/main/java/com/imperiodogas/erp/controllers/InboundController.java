@@ -22,7 +22,7 @@ public class InboundController {
     }
 
     @PostMapping
-    public ApiResponse<Inbound> create(@RequestBody Inbound inbound) {
-        return new ApiResponse<>(true, service.save(inbound));
+    public ApiResponse<Inbound> create(@RequestBody com.imperiodogas.erp.dto.InboundRequestDTO dto) {
+        return new ApiResponse<>(true, service.createFromDto(dto));
     }
 }

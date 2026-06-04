@@ -13,9 +13,18 @@ public class Person {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @Column(name = "name")
+    @JsonProperty("name")
     private String name;
+    
+    @Column(name = "document")
+    @JsonProperty("document")
     private String document;
+    
+    @Column(name = "phone")
+    @JsonProperty("phone")
     private String phone;
     @Column(name = "person_type")
+    @JsonProperty("person_type")
     private String type; // e.g. MOTORISTA
 }

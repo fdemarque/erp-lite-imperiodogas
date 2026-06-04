@@ -18,13 +18,16 @@ public class OrderItem {
     private Order order;
 
     @ManyToOne
-    @JoinColumn(name = "product_id")
-    private Product product;
+    @JoinColumn(name = "inbound_item_id")
+    @JsonProperty("inboundItem")
+    private InboundItem inboundItem;
 
+    @Column(name = "quantity")
+    @JsonProperty("quantity")
     private Integer quantity;
 
     @Column(name = "unit_price")
-    @JsonProperty("unit_price")
+    @JsonProperty("unitPrice")
     private java.math.BigDecimal unitPrice;
     
     @Column(name = "subtotal", insertable = false, updatable = false)

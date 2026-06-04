@@ -1,7 +1,7 @@
 import { Component, signal, OnInit, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { OrderService } from '../../services/order.service';
-import { ProductService, Product } from '../../services/product.service';
+import { InboundService, Inbound, InboundItem } from '../../services/inbound.service';
 import { formatCurrency, formatDate } from '../../utils/formatters';
 
 interface Order {
@@ -22,40 +22,61 @@ interface Order {
 })
 export class PedidosComponent implements OnInit {
   private readonly orderService = inject(OrderService);
-  private readonly productService = inject(ProductService);
+  private readonly inboundService = inject(InboundService);
 
   formatCurrency = formatCurrency;
   formatDate = formatDate;
   search = '';
   isNewOrderOpen = signal(false);
 
-  openNewOrderModal() {
-    this.isNewOrderOpen.set(true);
-  }
   viewingOrder = signal<Order | null>(null);
 
   orders = signal<Order[]>([]);
   filteredOrders = signal<Order[]>([]);
-  products = signal<Product[]>([]);
-
-  currentItem = { product_id: '', quantity: 1, unit_price: '' as string | number };
+  
+  // Cascade
+  inbounds = signal<Inbound[]>([]);
+  selectedInboundId = signal<string>('');
+  availableCategories = signal<InboundItem[]>([]);
+  
+  currentItem = { inboundItemId: '', quantity: 1, unitPrice: '' as string | number };
+  
+  newOrderPayload = { clientId: null as any, driverId: null as any, saleType: 'DINHEIRO', status: 'FINALIZADO', items: [] as any[] };
 
   ngOnInit() {
     this.loadOrders();
-    this.loadProducts();
+    this.loadInbounds();
   }
 
-  loadProducts() {
-    this.productService.getAll().subscribe((data) => {
-      this.products.set(data || []);
+  openNewOrderModal() {
+    this.isNewOrderOpen.set(true);
+    this.newOrderPayload.items = [];
+    this.currentItem = { inboundItemId: '', quantity: 1, unitPrice: '' };
+    this.selectedInboundId.set('');
+    this.availableCategories.set([]);
+  }
+
+  loadInbounds() {
+    this.inboundService.getAll().subscribe((data) => {
+      const validInbounds = data.filter(i => i.items && i.items.some(item => item.availableQuantity > 0));
+      this.inbounds.set(validInbounds || []);
     });
   }
 
-  onProductChange() {
-    const prod = this.products().find(p => p.id === this.currentItem.product_id);
-    if (prod && prod.current_price) {
-      this.currentItem.unit_price = prod.current_price;
+  onInboundChange() {
+    const ib = this.inbounds().find(i => i.id === this.selectedInboundId());
+    if (ib && ib.items) {
+      this.availableCategories.set(ib.items.filter(item => item.availableQuantity > 0));
+    } else {
+      this.availableCategories.set([]);
     }
+    this.currentItem.inboundItemId = '';
+    this.currentItem.unitPrice = '';
+  }
+
+  onCategoryChange() {
+    // optional: set default unitPrice based on the lot's unitCost (e.g. + 30%)
+    // or just leave it blank for user to input
   }
 
   loadOrders() {
@@ -64,10 +85,10 @@ export class PedidosComponent implements OnInit {
         id: o.id,
         client_name: o.clients?.people?.name || o.clients?.trade_name || 'Desconhecido',
         driver_name: o.driver?.name || 'Não atribuído',
-        sale_type: o.sale_type,
+        sale_type: o.saleType || o.sale_type,
         status: o.status,
-        total_amount: o.total_amount,
-        created_at: o.created_at,
+        total_amount: o.totalAmount || o.total_amount,
+        created_at: o.createdAt || o.created_at,
       }));
       this.orders.set(mappedOrders);
       this.updateFiltered();
@@ -81,6 +102,46 @@ export class PedidosComponent implements OnInit {
       (o.driver_name?.toLowerCase() || '').includes(s) ||
       o.id.toLowerCase().includes(s)
     ));
+  }
+
+  addItem() {
+    if (!this.currentItem.inboundItemId || !this.currentItem.quantity || !this.currentItem.unitPrice) return;
+    
+    const cat = this.availableCategories().find(c => c.id === this.currentItem.inboundItemId);
+    if (!cat) return;
+
+    if (this.currentItem.quantity > cat.availableQuantity) {
+      alert(`A quantidade solicitada (${this.currentItem.quantity}) é maior que o saldo disponível neste lote (${cat.availableQuantity}).`);
+      return;
+    }
+
+    this.newOrderPayload.items.push({
+      inboundItemId: this.currentItem.inboundItemId,
+      quantity: this.currentItem.quantity,
+      unitPrice: Number(this.currentItem.unitPrice),
+      _categoryLabel: cat.category
+    });
+    
+    this.currentItem = { inboundItemId: '', quantity: 1, unitPrice: '' };
+    this.selectedInboundId.set('');
+    this.availableCategories.set([]);
+  }
+
+  removeItem(index: number) {
+    this.newOrderPayload.items.splice(index, 1);
+  }
+
+  getOrderTotal() {
+    return this.newOrderPayload.items.reduce((acc, item) => acc + (item.quantity * item.unitPrice), 0);
+  }
+
+  saveOrder() {
+    if (this.newOrderPayload.items.length === 0) return;
+    this.orderService.create(this.newOrderPayload).subscribe(() => {
+      this.isNewOrderOpen.set(false);
+      this.loadOrders();
+      this.loadInbounds();
+    });
   }
 
   getStatusClass(status: string) {

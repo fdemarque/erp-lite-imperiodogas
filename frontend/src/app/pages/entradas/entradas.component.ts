@@ -2,15 +2,12 @@ import { Component, signal, OnInit, inject } from '@angular/core';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgxMaskDirective } from 'ngx-mask';
 import { InboundService, Inbound } from '../../services/inbound.service';
-import { ProductService } from '../../services/product.service';
-import type { Product } from '../../services/product.service';
 import { formatDate, formatCurrency } from '../../utils/formatters';
 
 interface Item {
-  product_id: string;
-  product_name: string;
+  category: string;
   quantity: number;
-  unit_price: number;
+  unitCost: number;
 }
 
 @Component({
@@ -21,7 +18,6 @@ interface Item {
 })
 export class EntradasComponent implements OnInit {
   private readonly inboundService = inject(InboundService);
-  private readonly productService = inject(ProductService);
   private readonly fb = inject(FormBuilder);
 
   formatDate = formatDate;
@@ -30,25 +26,28 @@ export class EntradasComponent implements OnInit {
   search = '';
   isNewFormOpen = signal(false);
 
-  // Lists
+  CATEGORIES = [
+    'GLP_13KG_CHEIO',
+    'GLP_13KG_VAZIO',
+    'GLP_20KG_CHEIO',
+    'GLP_20KG_VAZIO',
+    'GLP_45KG_CHEIO',
+    'GLP_45KG_VAZIO'
+  ];
+
   inbounds = signal<Inbound[]>([]);
   filteredInbounds = signal<Inbound[]>([]);
-  products = signal<Product[]>([]);
 
-  // Master form
   inboundForm: FormGroup = this.fb.group({
-    invoice_number: ['', Validators.required],
-    truck_plate: ['', Validators.required],
-    preco_custo: [0, [Validators.required, Validators.min(0)]]
+    invoiceNumber: ['', Validators.required],
+    truckPlate: ['', Validators.required]
   });
 
-  // Detail form (Temporary items)
   pendingItems = signal<Item[]>([]);
-  currentItem = { product_id: '', quantity: 1, unit_price: '' as string | number };
+  currentItem = { category: '', quantity: 1, unitCost: '' as string | number };
 
   ngOnInit() {
     this.loadInbounds();
-    this.loadProducts();
   }
 
   loadInbounds() {
@@ -58,57 +57,43 @@ export class EntradasComponent implements OnInit {
     });
   }
 
-  loadProducts() {
-    this.productService.getAll().subscribe((data) => {
-      if (!data || data.length === 0) {
-        console.log('Nenhum produto retornado da API. O banco pode estar vazio.');
-      }
-      this.products.set(data || []);
-    });
-  }
-
   updateFiltered() {
     const s = this.search.toLowerCase();
     this.filteredInbounds.set(this.inbounds().filter((i) =>
-      i.invoice_number.toLowerCase().includes(s) ||
-      i.truck_plate.toLowerCase().includes(s)
+      (i.invoice_number && i.invoice_number.toLowerCase().includes(s)) ||
+      (i.truck_plate && i.truck_plate.toLowerCase().includes(s))
     ));
   }
 
   handleOpenNew() {
-    this.inboundForm.reset({ invoice_number: '', truck_plate: '', preco_custo: 0 });
+    this.inboundForm.reset({ invoiceNumber: '', truckPlate: '' });
     this.pendingItems.set([]);
     this.resetCurrentItem();
     this.isNewFormOpen.set(true);
   }
 
   resetCurrentItem() {
-    this.currentItem = { product_id: '', quantity: 1, unit_price: '' };
+    this.currentItem = { category: '', quantity: 1, unitCost: '' };
   }
 
   addItem() {
     let parsedPrice = 0;
-    if (typeof this.currentItem.unit_price === 'string') {
-      let clean = this.currentItem.unit_price;
-      // Trata a string formatada pelo ngx-mask (ex: 'R$ 222,22' ou '2.222,22')
+    if (typeof this.currentItem.unitCost === 'string') {
+      let clean = this.currentItem.unitCost;
       clean = clean.replace('R$ ', '').replace(/\./g, '').replace(',', '.');
       parsedPrice = parseFloat(clean);
     } else {
-      parsedPrice = this.currentItem.unit_price;
+      parsedPrice = this.currentItem.unitCost;
     }
 
-    if (!this.currentItem.product_id || this.currentItem.quantity <= 0 || isNaN(parsedPrice) || parsedPrice <= 0) return;
-
-    const prod = this.products().find(p => p.id === this.currentItem.product_id);
-    if (!prod) return;
+    if (!this.currentItem.category || this.currentItem.quantity <= 0 || isNaN(parsedPrice) || parsedPrice <= 0) return;
 
     this.pendingItems.update(items => [
       ...items,
       {
-        product_id: this.currentItem.product_id,
-        product_name: prod.name,
+        category: this.currentItem.category,
         quantity: this.currentItem.quantity,
-        unit_price: parsedPrice
+        unitCost: parsedPrice
       }
     ]);
 
@@ -121,20 +106,14 @@ export class EntradasComponent implements OnInit {
 
   handleSave() {
     if (this.pendingItems().length === 0) return;
-
     if (this.inboundForm.invalid) return;
 
     const formValues = this.inboundForm.value;
 
     const payload = {
-      invoice_number: formValues.invoice_number,
-      truck_plate: formValues.truck_plate,
-      preco_custo: formValues.preco_custo,
-      items: this.pendingItems().map(i => ({
-        product_id: i.product_id,
-        quantity: i.quantity,
-        unit_price: i.unit_price
-      }))
+      invoiceNumber: formValues.invoiceNumber,
+      truckPlate: formValues.truckPlate,
+      items: this.pendingItems()
     };
 
     this.inboundService.create(payload).subscribe(() => {

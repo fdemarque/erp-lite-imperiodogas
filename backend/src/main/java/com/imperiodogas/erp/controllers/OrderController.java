@@ -27,8 +27,8 @@ public class OrderController {
     }
 
     @PostMapping
-    public ApiResponse<Order> create(@RequestBody Order order) {
-        return new ApiResponse<>(true, service.save(order));
+    public ApiResponse<Order> create(@RequestBody com.imperiodogas.erp.dto.OrderRequestDTO orderDto) {
+        return new ApiResponse<>(true, service.createFromDto(orderDto));
     }
 
     @PutMapping("/{id}")

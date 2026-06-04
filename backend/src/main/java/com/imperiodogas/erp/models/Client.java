@@ -14,23 +14,31 @@ public class Client {
     private UUID id;
 
     @Transient
+    @JsonProperty("person_type")
     private String personType;
 
     @Transient
+    @JsonProperty("name")
     private String name;
     
     @Transient
+    @JsonProperty("document")
     private String document;
     
     @Transient
+    @JsonProperty("phone")
     private String phone;
     
     @Transient
+    @JsonProperty("trade_name")
     private String tradeName;
     
     @Column(name = "payment_deadline_days")
+    @JsonProperty("payment_deadline_days")
     private Integer paymentDeadlineDays;
     
+    @Column(name = "active")
+    @JsonProperty("active")
     private Boolean active;
 
     @ManyToOne
@@ -39,11 +47,14 @@ public class Client {
     private Person person;
 
     @Transient
+    @JsonProperty("is_inadimplente")
     private Boolean isInadimplente = false;
     
     @Transient
+    @JsonProperty("revenue")
     private Double revenue = 0.0;
     
     @Transient
+    @JsonProperty("purchases_count")
     private Integer purchasesCount = 0;
 }

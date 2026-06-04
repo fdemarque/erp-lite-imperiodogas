@@ -83,7 +83,7 @@
           <div class="flex justify-between items-start">
             <div>
               <p class="text-sm text-slate-500 m-0">Cliente</p>
-              <p class="font-semibold text-slate-800 m-0">{{ viewingOrder()!.client_name }}</p>
+              <p class="font-semibold text-slate-800 m-0">{{ viewingOrder()!.client_name || '-' }}</p>
             </div>
             <div class="text-right">
               <p class="text-sm text-slate-500 m-0">Data</p>
@@ -115,8 +115,7 @@
   <!-- Master-Detail Modal: Novo Pedido -->
   @if (isNewOrderOpen()) {
   <div class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" (click)="isNewOrderOpen.set(false)">
-    <div class="bg-white rounded-2xl w-full max-w-[800px] shadow-xl max-h-[90vh] flex flex-col"
-      (click)="$event.stopPropagation()">
+    <div class="bg-white rounded-2xl w-full max-w-[800px] shadow-xl max-h-[90vh] flex flex-col" (click)="$event.stopPropagation()">
       <div class="p-6 border-b border-slate-100 shrink-0">
         <h3 class="text-lg font-semibold text-slate-800 m-0">Registrar Nova Venda</h3>
       </div>
@@ -124,71 +123,74 @@
       <div class="p-6 overflow-y-auto space-y-8 flex-1">
         <!-- Cabeçalho -->
         <div>
-          <h4 class="text-sm font-bold text-slate-700 uppercase tracking-wider mb-4 border-b border-slate-100 pb-2">1.
-            Dados da Venda</h4>
+          <h4 class="text-sm font-bold text-slate-700 uppercase tracking-wider mb-4 border-b border-slate-100 pb-2">1. Dados da Venda</h4>
           <div class="grid grid-cols-2 gap-4">
             <div class="space-y-2">
-              <label class="text-slate-600 block font-medium text-sm">Cliente</label>
-              <select
-                class="w-full h-10 rounded-lg border border-slate-300 px-3 text-sm bg-white focus:border-blue-500 focus:outline-none shadow-sm">
-                <option value="" disabled selected>Selecione um Cliente</option>
+              <label class="text-slate-600 block font-medium text-sm">Cliente (Opcional)</label>
+              <select class="w-full h-10 rounded-lg border border-slate-300 px-3 text-sm bg-white focus:border-blue-500 focus:outline-none shadow-sm">
+                <option value="" disabled selected>Venda Avulsa</option>
               </select>
             </div>
             <div class="space-y-2">
               <label class="text-slate-600 block font-medium text-sm">Entregador</label>
-              <select
-                class="w-full h-10 rounded-lg border border-slate-300 px-3 text-sm bg-white focus:border-blue-500 focus:outline-none shadow-sm">
-                <option value="" disabled selected>Retirada / Selecione</option>
+              <select class="w-full h-10 rounded-lg border border-slate-300 px-3 text-sm bg-white focus:border-blue-500 focus:outline-none shadow-sm">
+                <option value="" disabled selected>Retirada no Local</option>
               </select>
             </div>
           </div>
         </div>
 
-        <!-- Adição de Itens -->
+        <!-- Adição de Itens com Cascata -->
         <div>
-          <h4 class="text-sm font-bold text-slate-700 uppercase tracking-wider mb-4 border-b border-slate-100 pb-2">2.
-            Itens do Pedido</h4>
+          <h4 class="text-sm font-bold text-slate-700 uppercase tracking-wider mb-4 border-b border-slate-100 pb-2">2. Itens da Venda</h4>
           <div class="grid grid-cols-12 gap-3 items-end">
-            <div class="col-span-5 space-y-2">
-              <label class="text-slate-600 block text-xs font-medium">Produto</label>
-              <select
-                class="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 shadow-sm focus:border-blue-500 focus:outline-none"
-                [(ngModel)]="currentItem.product_id" (ngModelChange)="onProductChange()">
-                <option value="" disabled selected>Selecione um Produto</option>
-                @for (prod of products(); track prod.id) {
-                  <option [value]="prod.id">{{ prod.name }}</option>
+            <!-- Passo A -->
+            <div class="col-span-3 space-y-2">
+              <label class="text-slate-600 block text-xs font-medium">Remessa / Lote</label>
+              <select class="w-full h-10 rounded-lg border border-slate-300 px-3 text-sm bg-white focus:border-blue-500" [(ngModel)]="selectedInboundId" (ngModelChange)="onInboundChange()">
+                <option value="" disabled selected>Selecione um lote</option>
+                @for (ib of inbounds(); track ib.id) {
+                  <option [value]="ib.id">{{ formatDate(ib.created_at) }} - NF: {{ ib.invoice_number || '-' }}</option>
                 }
               </select>
             </div>
+
+            <!-- Passo B -->
             <div class="col-span-3 space-y-2">
-              <label class="text-slate-600 block text-xs font-medium">Quantidade</label>
-              <input type="number" min="1" class="w-full h-10 rounded-lg border border-slate-300 px-3 text-sm"
-                [(ngModel)]="currentItem.quantity" />
+              <label class="text-slate-600 block text-xs font-medium">Produto / Categoria</label>
+              <select class="w-full h-10 rounded-lg border border-slate-300 px-3 text-sm bg-white focus:border-blue-500" [(ngModel)]="currentItem.inboundItemId" (ngModelChange)="onCategoryChange()" [disabled]="!selectedInboundId()">
+                <option value="" disabled selected>Categoria</option>
+                @for (cat of availableCategories(); track cat.id) {
+                  <option [value]="cat.id">{{ cat.category }} ({{ cat.availableQuantity }} Disp)</option>
+                }
+              </select>
             </div>
+
+            <!-- Passo C -->
+            <div class="col-span-2 space-y-2">
+              <label class="text-slate-600 block text-xs font-medium">Qtd.</label>
+              <input type="number" min="1" class="w-full h-10 rounded-lg border border-slate-300 px-3 text-sm" [(ngModel)]="currentItem.quantity" [disabled]="!currentItem.inboundItemId" />
+            </div>
+            
             <div class="col-span-3 space-y-2">
-              <label class="text-slate-600 block text-xs font-medium">Valor Unitário</label>
-              <input type="number" step="0.01" placeholder="0.00"
-                class="w-full h-10 rounded-lg border border-slate-300 px-3 text-sm"
-                [(ngModel)]="currentItem.unit_price" />
+              <label class="text-slate-600 block text-xs font-medium">Valor Unitário (Venda)</label>
+              <input type="number" step="0.01" placeholder="0.00" class="w-full h-10 rounded-lg border border-slate-300 px-3 text-sm" [(ngModel)]="currentItem.unitPrice" [disabled]="!currentItem.inboundItemId" />
             </div>
+            
+            <!-- Botão Adicionar -->
             <div class="col-span-1">
-              <button
-                class="h-10 w-full rounded-lg bg-orange-50 text-orange-600 hover:bg-orange-100 border border-orange-200 flex items-center justify-center transition-colors">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                  <path fill-rule="evenodd"
-                    d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
-                    clip-rule="evenodd" />
-                </svg>
+              <button (click)="addItem()" [disabled]="!currentItem.inboundItemId || !currentItem.quantity || !currentItem.unitPrice" class="h-10 w-full rounded-lg bg-orange-50 text-orange-600 hover:bg-orange-100 border border-orange-200 flex items-center justify-center transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" /></svg>
               </button>
             </div>
           </div>
 
-          <!-- Tabela de Memória Temporária -->
+          <!-- Tabela Temporária -->
           <div class="mt-6 border border-slate-200 rounded-lg overflow-hidden">
             <table class="w-full text-sm">
               <thead class="bg-slate-50 border-b border-slate-200">
                 <tr>
-                  <th class="text-left py-2 px-3 font-medium text-slate-600">Produto</th>
+                  <th class="text-left py-2 px-3 font-medium text-slate-600">Categoria Produto</th>
                   <th class="text-right py-2 px-3 font-medium text-slate-600">Qtd</th>
                   <th class="text-right py-2 px-3 font-medium text-slate-600">V. Unitário</th>
                   <th class="text-right py-2 px-3 font-medium text-slate-600">Total</th>
@@ -196,22 +198,38 @@
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td colspan="5" class="py-4 text-center text-slate-400">Nenhum item adicionado.</td>
-                </tr>
+                @if (newOrderPayload.items.length === 0) {
+                  <tr>
+                    <td colspan="5" class="py-4 text-center text-slate-400">Nenhum item adicionado.</td>
+                  </tr>
+                }
+                @for (item of newOrderPayload.items; track item.inboundItemId; let idx = $index) {
+                  <tr class="border-b border-slate-50 hover:bg-slate-50/50">
+                    <td class="py-2 px-3 font-medium text-slate-800">{{ item._categoryLabel }}</td>
+                    <td class="py-2 px-3 text-right">{{ item.quantity }}</td>
+                    <td class="py-2 px-3 text-right">{{ formatCurrency(item.unitPrice) }}</td>
+                    <td class="py-2 px-3 text-right font-semibold">{{ formatCurrency(item.quantity * item.unitPrice) }}</td>
+                    <td class="py-2 px-3 text-right">
+                      <button (click)="removeItem(idx)" class="text-red-500 hover:text-red-700 bg-transparent border-none cursor-pointer">✕</button>
+                    </td>
+                  </tr>
+                }
               </tbody>
             </table>
+          </div>
+          
+          <div class="flex justify-end pt-4 mt-2">
+            <div class="text-right">
+              <p class="text-sm text-slate-500 m-0">Total do Pedido</p>
+              <p class="text-2xl font-bold text-orange-600 m-0">{{ formatCurrency(getOrderTotal()) }}</p>
+            </div>
           </div>
         </div>
       </div>
 
       <div class="p-6 border-t border-slate-100 flex justify-end gap-3 shrink-0">
-        <button (click)="isNewOrderOpen.set(false)"
-          class="rounded-full h-10 px-6 font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 cursor-pointer border-none">Cancelar</button>
-        <button
-          class="rounded-full h-10 px-6 font-medium text-white cursor-pointer border-none transition-colors bg-slate-400 cursor-not-allowed">
-          Salvar Pedido
-        </button>
+        <button (click)="isNewOrderOpen.set(false)" class="rounded-full h-10 px-6 font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 cursor-pointer border-none">Cancelar</button>
+        <button (click)="saveOrder()" [disabled]="newOrderPayload.items.length === 0" class="rounded-full h-10 px-6 font-medium text-white transition-colors border-none" [class]="newOrderPayload.items.length > 0 ? 'bg-slate-900 hover:bg-slate-800 cursor-pointer' : 'bg-slate-400 cursor-not-allowed'">Salvar Pedido</button>
       </div>
     </div>
   </div>
