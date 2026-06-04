@@ -1,9 +1,12 @@
 /home/demarque/Documentos/erp-automacao/backend/src/main/java/com/imperiodogas/erp/dto/PersonRequestDTO.java
+/home/demarque/Documentos/erp-automacao/backend/src/main/java/com/imperiodogas/erp/services/UserService.java
 /home/demarque/Documentos/erp-automacao/backend/src/main/java/com/imperiodogas/erp/dto/OrderRequestDTO.java
 /home/demarque/Documentos/erp-automacao/backend/src/main/java/com/imperiodogas/erp/models/InboundItem.java
+/home/demarque/Documentos/erp-automacao/backend/src/main/java/com/imperiodogas/erp/models/UserRole.java
 /home/demarque/Documentos/erp-automacao/backend/src/main/java/com/imperiodogas/erp/repositories/InboundRepository.java
 /home/demarque/Documentos/erp-automacao/backend/src/main/java/com/imperiodogas/erp/models/Order.java
 /home/demarque/Documentos/erp-automacao/backend/src/main/java/com/imperiodogas/erp/models/Person.java
+/home/demarque/Documentos/erp-automacao/backend/src/main/java/com/imperiodogas/erp/dto/UserRequestDTO.java
 /home/demarque/Documentos/erp-automacao/backend/src/main/java/com/imperiodogas/erp/repositories/PersonRepository.java
 /home/demarque/Documentos/erp-automacao/backend/src/main/java/com/imperiodogas/erp/repositories/OrderRepository.java
 /home/demarque/Documentos/erp-automacao/backend/src/main/java/com/imperiodogas/erp/models/SaleType.java
@@ -12,6 +15,7 @@
 /home/demarque/Documentos/erp-automacao/backend/src/main/java/com/imperiodogas/erp/models/Client.java
 /home/demarque/Documentos/erp-automacao/backend/src/main/java/com/imperiodogas/erp/models/OrderItem.java
 /home/demarque/Documentos/erp-automacao/backend/src/main/java/com/imperiodogas/erp/ErpAutomacaoApplication.java
+/home/demarque/Documentos/erp-automacao/backend/src/main/java/com/imperiodogas/erp/models/User.java
 /home/demarque/Documentos/erp-automacao/backend/src/main/java/com/imperiodogas/erp/models/PersonType.java
 /home/demarque/Documentos/erp-automacao/backend/src/main/java/com/imperiodogas/erp/services/OrderService.java
 /home/demarque/Documentos/erp-automacao/backend/src/main/java/com/imperiodogas/erp/models/OrderStatus.java
@@ -19,6 +23,8 @@
 /home/demarque/Documentos/erp-automacao/backend/src/main/java/com/imperiodogas/erp/controllers/InboundController.java
 /home/demarque/Documentos/erp-automacao/backend/src/main/java/com/imperiodogas/erp/repositories/ClientRepository.java
 /home/demarque/Documentos/erp-automacao/backend/src/main/java/com/imperiodogas/erp/dto/ApiResponse.java
+/home/demarque/Documentos/erp-automacao/backend/src/main/java/com/imperiodogas/erp/repositories/UserRepository.java
+/home/demarque/Documentos/erp-automacao/backend/src/main/java/com/imperiodogas/erp/controllers/UserController.java
 /home/demarque/Documentos/erp-automacao/backend/src/main/java/com/imperiodogas/erp/repositories/InboundItemRepository.java
 /home/demarque/Documentos/erp-automacao/backend/src/main/java/com/imperiodogas/erp/controllers/OrderController.java
 /home/demarque/Documentos/erp-automacao/backend/src/main/java/com/imperiodogas/erp/controllers/ClientController.java
