@@ -1,6 +1,7 @@
 import { Component, signal, OnInit, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { OrderService } from '../../services/order.service';
+import { ProductService, Product } from '../../services/product.service';
 import { formatCurrency, formatDate } from '../../utils/formatters';
 
 interface Order {
@@ -21,6 +22,7 @@ interface Order {
 })
 export class PedidosComponent implements OnInit {
   private readonly orderService = inject(OrderService);
+  private readonly productService = inject(ProductService);
 
   formatCurrency = formatCurrency;
   formatDate = formatDate;
@@ -33,11 +35,27 @@ export class PedidosComponent implements OnInit {
   viewingOrder = signal<Order | null>(null);
 
   orders = signal<Order[]>([]);
-
   filteredOrders = signal<Order[]>([]);
+  products = signal<Product[]>([]);
+
+  currentItem = { product_id: '', quantity: 1, unit_price: '' as string | number };
 
   ngOnInit() {
     this.loadOrders();
+    this.loadProducts();
+  }
+
+  loadProducts() {
+    this.productService.getAll().subscribe((data) => {
+      this.products.set(data || []);
+    });
+  }
+
+  onProductChange() {
+    const prod = this.products().find(p => p.id === this.currentItem.product_id);
+    if (prod && prod.current_price) {
+      this.currentItem.unit_price = prod.current_price;
+    }
   }
 
   loadOrders() {

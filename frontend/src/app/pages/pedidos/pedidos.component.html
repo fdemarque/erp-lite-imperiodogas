@@ -152,18 +152,24 @@
             <div class="col-span-5 space-y-2">
               <label class="text-slate-600 block text-xs font-medium">Produto</label>
               <select
-                class="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 shadow-sm focus:border-blue-500 focus:outline-none">
+                class="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 shadow-sm focus:border-blue-500 focus:outline-none"
+                [(ngModel)]="currentItem.product_id" (ngModelChange)="onProductChange()">
                 <option value="" disabled selected>Selecione um Produto</option>
+                @for (prod of products(); track prod.id) {
+                  <option [value]="prod.id">{{ prod.name }}</option>
+                }
               </select>
             </div>
             <div class="col-span-3 space-y-2">
               <label class="text-slate-600 block text-xs font-medium">Quantidade</label>
-              <input type="number" min="1" class="w-full h-10 rounded-lg border border-slate-300 px-3 text-sm" />
+              <input type="number" min="1" class="w-full h-10 rounded-lg border border-slate-300 px-3 text-sm"
+                [(ngModel)]="currentItem.quantity" />
             </div>
             <div class="col-span-3 space-y-2">
               <label class="text-slate-600 block text-xs font-medium">Valor Unitário</label>
-              <input type="text" placeholder="R$ 0,00"
-                class="w-full h-10 rounded-lg border border-slate-300 px-3 text-sm" />
+              <input type="number" step="0.01" placeholder="0.00"
+                class="w-full h-10 rounded-lg border border-slate-300 px-3 text-sm"
+                [(ngModel)]="currentItem.unit_price" />
             </div>
             <div class="col-span-1">
               <button

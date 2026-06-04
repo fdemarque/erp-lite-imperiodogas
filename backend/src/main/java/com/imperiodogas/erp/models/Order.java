@@ -38,4 +38,7 @@ public class Order {
     @ManyToOne
     @JoinColumn(name = "delivery_driver_id")
     private Person driver;
+
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    private java.util.List<OrderItem> items;
 }

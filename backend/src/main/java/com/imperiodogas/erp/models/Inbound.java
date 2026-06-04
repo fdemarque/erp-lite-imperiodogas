@@ -25,6 +25,10 @@ public class Inbound {
 
     private String status;
 
+    @Column(name = "preco_custo")
+    @JsonProperty("preco_custo")
+    private java.math.BigDecimal precoCusto;
+
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     @JsonProperty("created_at")

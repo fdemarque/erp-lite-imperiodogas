@@ -1,5 +1,5 @@
 import { Component, signal, OnInit, inject } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgxMaskDirective } from 'ngx-mask';
 import { InboundService, Inbound } from '../../services/inbound.service';
 import { ProductService } from '../../services/product.service';
@@ -16,12 +16,13 @@ interface Item {
 @Component({
   selector: 'app-entradas',
   standalone: true,
-  imports: [FormsModule, NgxMaskDirective],
+  imports: [FormsModule, ReactiveFormsModule, NgxMaskDirective],
   templateUrl: './entradas.component.html',
 })
 export class EntradasComponent implements OnInit {
   private readonly inboundService = inject(InboundService);
   private readonly productService = inject(ProductService);
+  private readonly fb = inject(FormBuilder);
 
   formatDate = formatDate;
   formatCurrency = formatCurrency;
@@ -35,7 +36,11 @@ export class EntradasComponent implements OnInit {
   products = signal<Product[]>([]);
 
   // Master form
-  formData = { invoice_number: '', truck_plate: '' };
+  inboundForm: FormGroup = this.fb.group({
+    invoice_number: ['', Validators.required],
+    truck_plate: ['', Validators.required],
+    preco_custo: [0, [Validators.required, Validators.min(0)]]
+  });
 
   // Detail form (Temporary items)
   pendingItems = signal<Item[]>([]);
@@ -71,7 +76,7 @@ export class EntradasComponent implements OnInit {
   }
 
   handleOpenNew() {
-    this.formData = { invoice_number: '', truck_plate: '' };
+    this.inboundForm.reset({ invoice_number: '', truck_plate: '', preco_custo: 0 });
     this.pendingItems.set([]);
     this.resetCurrentItem();
     this.isNewFormOpen.set(true);
@@ -117,9 +122,14 @@ export class EntradasComponent implements OnInit {
   handleSave() {
     if (this.pendingItems().length === 0) return;
 
+    if (this.inboundForm.invalid) return;
+
+    const formValues = this.inboundForm.value;
+
     const payload = {
-      invoice_number: this.formData.invoice_number,
-      truck_plate: this.formData.truck_plate,
+      invoice_number: formValues.invoice_number,
+      truck_plate: formValues.truck_plate,
+      preco_custo: formValues.preco_custo,
       items: this.pendingItems().map(i => ({
         product_id: i.product_id,
         quantity: i.quantity,
