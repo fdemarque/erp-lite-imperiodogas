@@ -1,6 +1,7 @@
 package com.imperiodogas.erp.controllers;
 
 import com.imperiodogas.erp.dto.ApiResponse;
+import com.imperiodogas.erp.dto.ClientRequestDTO;
 import com.imperiodogas.erp.models.Client;
 import com.imperiodogas.erp.services.ClientService;
 import org.springframework.web.bind.annotation.*;
@@ -27,14 +28,13 @@ public class ClientController {
     }
 
     @PostMapping
-    public ApiResponse<Client> create(@RequestBody Client client) {
-        return new ApiResponse<>(true, service.save(client));
+    public ApiResponse<Client> create(@RequestBody ClientRequestDTO dto) {
+        return new ApiResponse<>(true, service.createFromDto(dto));
     }
 
     @PutMapping("/{id}")
-    public ApiResponse<Client> update(@PathVariable UUID id, @RequestBody Client client) {
-        client.setId(id);
-        return new ApiResponse<>(true, service.save(client));
+    public ApiResponse<Client> update(@PathVariable UUID id, @RequestBody ClientRequestDTO dto) {
+        return new ApiResponse<>(true, service.updateFromDto(id, dto));
     }
 
     @DeleteMapping("/{id}")

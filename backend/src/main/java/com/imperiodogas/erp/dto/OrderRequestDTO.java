@@ -1,24 +1,34 @@
 package com.imperiodogas.erp.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.imperiodogas.erp.models.SaleType;
+import com.imperiodogas.erp.models.OrderStatus;
 import lombok.Data;
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Data
 public class OrderRequestDTO {
     @JsonProperty("clientId")
     private UUID clientId;
-    
+
     @JsonProperty("driverId")
     private UUID driverId;
-    
+
+    @JsonProperty("deliveryAddressId")
+    private UUID deliveryAddressId;
+
     @JsonProperty("saleType")
-    private String saleType;
-    
+    private SaleType saleType;
+
     @JsonProperty("status")
-    private String status;
-    
+    private OrderStatus status;
+
+    @JsonProperty("dueDate")
+    private LocalDate dueDate;
+
     @JsonProperty("items")
     private List<OrderItemDTO> items;
 
@@ -26,11 +36,11 @@ public class OrderRequestDTO {
     public static class OrderItemDTO {
         @JsonProperty("inboundItemId")
         private UUID inboundItemId;
-        
+
         @JsonProperty("quantity")
         private Integer quantity;
-        
+
         @JsonProperty("unitPrice")
-        private java.math.BigDecimal unitPrice;
+        private BigDecimal unitPrice;
     }
 }

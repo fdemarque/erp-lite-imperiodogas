@@ -3,6 +3,9 @@ package com.imperiodogas.erp.models;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @Data
@@ -13,48 +16,26 @@ public class Client {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Transient
-    @JsonProperty("person_type")
-    private String personType;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "person_id", nullable = false)
+    @JsonProperty("people")
+    private Person person;
 
-    @Transient
-    @JsonProperty("name")
-    private String name;
-    
-    @Transient
-    @JsonProperty("document")
-    private String document;
-    
-    @Transient
-    @JsonProperty("phone")
-    private String phone;
-    
-    @Transient
-    @JsonProperty("trade_name")
-    private String tradeName;
-    
     @Column(name = "payment_deadline_days")
     @JsonProperty("payment_deadline_days")
     private Integer paymentDeadlineDays;
-    
+
     @Column(name = "active")
     @JsonProperty("active")
     private Boolean active;
 
-    @ManyToOne
-    @JoinColumn(name = "person_id")
-    @JsonProperty("people")
-    private Person person;
+    @CreationTimestamp
+    @Column(name = "created_at", updatable = false)
+    @JsonProperty("created_at")
+    private OffsetDateTime createdAt;
 
-    @Transient
-    @JsonProperty("is_inadimplente")
-    private Boolean isInadimplente = false;
-    
-    @Transient
-    @JsonProperty("revenue")
-    private Double revenue = 0.0;
-    
-    @Transient
-    @JsonProperty("purchases_count")
-    private Integer purchasesCount = 0;
+    @UpdateTimestamp
+    @Column(name = "updated_at")
+    @JsonProperty("updated_at")
+    private OffsetDateTime updatedAt;
 }

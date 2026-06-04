@@ -3,9 +3,11 @@ package com.imperiodogas.erp.models;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Data;
-import java.time.LocalDateTime;
-import java.util.UUID;
 import org.hibernate.annotations.CreationTimestamp;
+import java.time.OffsetDateTime;
+import java.util.UUID;
+import java.util.List;
+import java.util.ArrayList;
 
 @Data
 @Entity
@@ -15,11 +17,11 @@ public class Inbound {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(name = "invoice_number")
+    @Column(name = "invoice_number", nullable = false)
     @JsonProperty("invoice_number")
     private String invoiceNumber;
 
-    @Column(name = "truck_plate")
+    @Column(name = "truck_plate", nullable = false)
     @JsonProperty("truck_plate")
     private String truckPlate;
 
@@ -28,15 +30,23 @@ public class Inbound {
     private String status;
 
     @Column(name = "total_amount")
-    @JsonProperty("totalAmount")
+    @JsonProperty("total_amount")
     private java.math.BigDecimal totalAmount;
+
+    @Column(name = "created_by")
+    @JsonProperty("created_by")
+    private UUID createdBy;
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     @JsonProperty("created_at")
-    private LocalDateTime createdAt;
+    private OffsetDateTime createdAt;
+
+    @Column(name = "finalized_at")
+    @JsonProperty("finalized_at")
+    private OffsetDateTime finalizedAt;
 
     @OneToMany(mappedBy = "inbound", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonProperty("items")
-    private java.util.List<InboundItem> items = new java.util.ArrayList<>();
+    private List<InboundItem> items = new ArrayList<>();
 }

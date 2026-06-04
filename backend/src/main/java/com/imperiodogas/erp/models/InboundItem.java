@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.ToString;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 import java.util.UUID;
 
 @Data
@@ -22,7 +24,8 @@ public class InboundItem {
     private Inbound inbound;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "category")
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    @Column(name = "category", columnDefinition = "product_category")
     @JsonProperty("category")
     private ProductCategory category;
 

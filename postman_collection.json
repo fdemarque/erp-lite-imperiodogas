@@ -3,51 +3,27 @@
     "name": "ERP Automação - Império do Gás",
     "description": "Coleção completa de endpoints da API REST do ERP de rastreabilidade de remessas GLP.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "_postman_id": "erp-imperiogas-v1"
+    "_postman_id": "erp-imperiogas-v2"
   },
   "variable": [
-    {
-      "key": "baseUrl",
-      "value": "http://localhost:8081",
-      "type": "string"
-    },
-    {
-      "key": "clientId",
-      "value": "",
-      "type": "string"
-    },
-    {
-      "key": "inboundId",
-      "value": "",
-      "type": "string"
-    },
-    {
-      "key": "inboundItemId",
-      "value": "",
-      "type": "string"
-    },
-    {
-      "key": "orderId",
-      "value": "",
-      "type": "string"
-    },
-    {
-      "key": "personId",
-      "value": "",
-      "type": "string"
-    }
+    { "key": "baseUrl", "value": "http://localhost:8081", "type": "string" },
+    { "key": "clientId", "value": "", "type": "string" },
+    { "key": "inboundId", "value": "", "type": "string" },
+    { "key": "inboundItemId", "value": "", "type": "string" },
+    { "key": "orderId", "value": "", "type": "string" },
+    { "key": "personId", "value": "", "type": "string" }
   ],
   "item": [
     {
       "name": "People",
-      "description": "Gerenciamento de pessoas físicas e jurídicas (clientes, motoristas, usuários).",
+      "description": "Gerenciamento de pessoas. person_type: PF | PJ",
       "item": [
         {
           "name": "Listar todas as Pessoas",
           "request": {
             "method": "GET",
             "url": "{{baseUrl}}/api/people",
-            "description": "Retorna todas as pessoas cadastradas no sistema."
+            "description": "Retorna todas as pessoas cadastradas."
           },
           "event": [
             {
@@ -68,32 +44,20 @@
           "request": {
             "method": "GET",
             "url": "{{baseUrl}}/api/people/{{personId}}",
-            "description": "Retorna uma pessoa específica pelo UUID."
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
-                ]
-              }
-            }
-          ]
+            "description": "Retorna uma pessoa pelo UUID."
+          }
         },
         {
-          "name": "Criar Pessoa (Cliente)",
+          "name": "Criar Pessoa Física (PF)",
           "request": {
             "method": "POST",
             "url": "{{baseUrl}}/api/people",
-            "header": [
-              { "key": "Content-Type", "value": "application/json" }
-            ],
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"João da Silva\",\n  \"document\": \"123.456.789-00\",\n  \"phone\": \"(11) 99999-0001\",\n  \"person_type\": \"FISICA\"\n}"
+              "raw": "{\n  \"name\": \"João da Silva\",\n  \"document\": \"123.456.789-00\",\n  \"phone\": \"(11) 99999-0001\",\n  \"person_type\": \"PF\"\n}"
             },
-            "description": "Cria uma nova pessoa. person_type: FISICA | JURIDICA."
+            "description": "Cria uma pessoa física. person_type obrigatório: PF | PJ"
           },
           "event": [
             {
@@ -109,40 +73,49 @@
           ]
         },
         {
+          "name": "Criar Pessoa Jurídica (PJ)",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/people",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Distribuidora ABC Ltda\",\n  \"document\": \"12.345.678/0001-99\",\n  \"phone\": \"(11) 3333-0001\",\n  \"trade_name\": \"ABC Gás\",\n  \"person_type\": \"PJ\"\n}"
+            },
+            "description": "Cria uma pessoa jurídica com trade_name."
+          }
+        },
+        {
           "name": "Atualizar Pessoa",
           "request": {
             "method": "PUT",
             "url": "{{baseUrl}}/api/people/{{personId}}",
-            "header": [
-              { "key": "Content-Type", "value": "application/json" }
-            ],
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"João da Silva Atualizado\",\n  \"document\": \"123.456.789-00\",\n  \"phone\": \"(11) 98888-0001\",\n  \"person_type\": \"FISICA\"\n}"
-            },
-            "description": "Atualiza os dados de uma pessoa existente."
+              "raw": "{\n  \"name\": \"João da Silva Atualizado\",\n  \"phone\": \"(11) 98888-0001\",\n  \"person_type\": \"PF\"\n}"
+            }
           }
         },
         {
           "name": "Deletar Pessoa",
           "request": {
             "method": "DELETE",
-            "url": "{{baseUrl}}/api/people/{{personId}}",
-            "description": "Remove uma pessoa do sistema pelo UUID."
+            "url": "{{baseUrl}}/api/people/{{personId}}"
           }
         }
       ]
     },
     {
       "name": "Clients",
-      "description": "Gerenciamento de clientes vinculados a pessoas.",
+      "description": "Clientes vinculados a pessoas. Requer person_id existente em /api/people.",
       "item": [
         {
           "name": "Listar todos os Clientes",
           "request": {
             "method": "GET",
             "url": "{{baseUrl}}/api/clients",
-            "description": "Retorna todos os clientes com dados da pessoa associada."
+            "description": "Retorna clientes com pessoa associada (eager load)."
           },
           "event": [
             {
@@ -161,8 +134,7 @@
           "name": "Buscar Cliente por ID",
           "request": {
             "method": "GET",
-            "url": "{{baseUrl}}/api/clients/{{clientId}}",
-            "description": "Retorna um cliente específico pelo UUID."
+            "url": "{{baseUrl}}/api/clients/{{clientId}}"
           }
         },
         {
@@ -170,14 +142,12 @@
           "request": {
             "method": "POST",
             "url": "{{baseUrl}}/api/clients",
-            "header": [
-              { "key": "Content-Type", "value": "application/json" }
-            ],
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"person_id\": \"{{personId}}\",\n  \"payment_deadline_days\": 30,\n  \"active\": true\n}"
             },
-            "description": "Cria um cliente vinculado a uma pessoa existente (person_id)."
+            "description": "Cria um cliente vinculado a uma pessoa existente.\nperson_id é obrigatório."
           },
           "event": [
             {
@@ -197,12 +167,10 @@
           "request": {
             "method": "PUT",
             "url": "{{baseUrl}}/api/clients/{{clientId}}",
-            "header": [
-              { "key": "Content-Type", "value": "application/json" }
-            ],
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"person_id\": \"{{personId}}\",\n  \"payment_deadline_days\": 15,\n  \"active\": true\n}"
+              "raw": "{\n  \"payment_deadline_days\": 15,\n  \"active\": true\n}"
             }
           }
         },
@@ -217,14 +185,14 @@
     },
     {
       "name": "Inbounds (Entradas de Estoque)",
-      "description": "Gerenciamento de remessas de gás GLP. Cada entrada pode conter múltiplos itens por categoria.",
+      "description": "Remessas de GLP. Cada entrada pode ter múltiplos itens por categoria.",
       "item": [
         {
           "name": "Listar todas as Entradas",
           "request": {
             "method": "GET",
             "url": "{{baseUrl}}/api/inbounds",
-            "description": "Retorna todas as remessas com seus itens aninhados (items[]). Cada item contém category, quantity, availableQuantity e unitCost."
+            "description": "Retorna remessas com items[]. Cada item tem category, quantity, availableQuantity, unitCost, subtotal."
           },
           "event": [
             {
@@ -250,14 +218,12 @@
           "request": {
             "method": "POST",
             "url": "{{baseUrl}}/api/inbounds",
-            "header": [
-              { "key": "Content-Type", "value": "application/json" }
-            ],
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"invoiceNumber\": \"NF-001234\",\n  \"truckPlate\": \"ABC-1234\",\n  \"items\": [\n    {\n      \"category\": \"GLP_13KG_CHEIO\",\n      \"quantity\": 100,\n      \"unitCost\": 45.00\n    },\n    {\n      \"category\": \"GLP_20KG_CHEIO\",\n      \"quantity\": 50,\n      \"unitCost\": 72.00\n    },\n    {\n      \"category\": \"GLP_13KG_VAZIO\",\n      \"quantity\": 30,\n      \"unitCost\": 15.00\n    }\n  ]\n}"
             },
-            "description": "Registra uma nova remessa de entrada.\n\nCategorias válidas (ProductCategory):\n- GLP_13KG_CHEIO\n- GLP_13KG_VAZIO\n- GLP_20KG_CHEIO\n- GLP_20KG_VAZIO\n- GLP_45KG_CHEIO\n- GLP_45KG_VAZIO\n\nO sistema define automaticamente:\n- availableQuantity = quantity (saldo inicial do lote)\n- status = 'ABERTO'\n- totalAmount = soma de (quantity * unitCost)"
+            "description": "Registra nova remessa.\n\nCategorias válidas:\n- GLP_13KG_CHEIO / GLP_13KG_VAZIO\n- GLP_20KG_CHEIO / GLP_20KG_VAZIO\n- GLP_45KG_CHEIO / GLP_45KG_VAZIO\n\nO sistema define automaticamente:\n- availableQuantity = quantity\n- status = ABERTO\n- totalAmount = Σ (quantity × unitCost)"
           },
           "event": [
             {
@@ -281,14 +247,14 @@
     },
     {
       "name": "Orders (Vendas)",
-      "description": "Gerenciamento de pedidos/vendas. Cada venda referencia itens de lotes (InboundItems) específicos, garantindo rastreabilidade e desconto automático de estoque.",
+      "description": "Pedidos de venda. Referencia InboundItems de lotes específicos para rastreabilidade e desconto automático de estoque.\n\nsaleType: AVISTA | FIADO\nstatus: ABERTO | ENTREGUE | CANCELADO",
       "item": [
         {
           "name": "Listar todos os Pedidos",
           "request": {
             "method": "GET",
             "url": "{{baseUrl}}/api/orders",
-            "description": "Retorna todos os pedidos com cliente, status e total."
+            "description": "Retorna pedidos com cliente, status e total."
           },
           "event": [
             {
@@ -307,23 +273,20 @@
           "name": "Buscar Pedido por ID",
           "request": {
             "method": "GET",
-            "url": "{{baseUrl}}/api/orders/{{orderId}}",
-            "description": "Retorna um pedido específico com seus itens."
+            "url": "{{baseUrl}}/api/orders/{{orderId}}"
           }
         },
         {
-          "name": "Criar Pedido (Nova Venda)",
+          "name": "Criar Pedido - À Vista",
           "request": {
             "method": "POST",
             "url": "{{baseUrl}}/api/orders",
-            "header": [
-              { "key": "Content-Type", "value": "application/json" }
-            ],
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"clientId\": \"{{clientId}}\",\n  \"driverId\": null,\n  \"saleType\": \"DINHEIRO\",\n  \"status\": \"FINALIZADO\",\n  \"items\": [\n    {\n      \"inboundItemId\": \"{{inboundItemId}}\",\n      \"quantity\": 5,\n      \"unitPrice\": 60.00\n    }\n  ]\n}"
+              "raw": "{\n  \"clientId\": \"{{clientId}}\",\n  \"driverId\": null,\n  \"saleType\": \"AVISTA\",\n  \"status\": \"ABERTO\",\n  \"items\": [\n    {\n      \"inboundItemId\": \"{{inboundItemId}}\",\n      \"quantity\": 5,\n      \"unitPrice\": 60.00\n    }\n  ]\n}"
             },
-            "description": "Registra uma nova venda.\n\nRegras de negócio:\n- inboundItemId: UUID do item de lote (obtido de GET /api/inbounds)\n- quantity: quantidade vendida — NÃO pode exceder o availableQuantity do lote\n- unitPrice: preço de VENDA (não o custo de entrada)\n- O sistema subtrai automaticamente quantity do availableQuantity do InboundItem\n- Se quantity > availableQuantity, retorna erro com mensagem 'Quantidade insuficiente em estoque para o lote selecionado'\n- totalAmount é calculado automaticamente: soma de (quantity * unitPrice)\n\nsaleType válidos: DINHEIRO | FIADO | CARTAO | PIX\nstatus válidos: ABERTO | FINALIZADO | CANCELADO"
+            "description": "Registra nova venda.\n\nRegras:\n- clientId e saleType são obrigatórios\n- inboundItemId: UUID do item de lote (GET /api/inbounds → items[].id)\n- quantity NÃO pode exceder availableQuantity do lote\n- O sistema subtrai quantity do availableQuantity automaticamente\n- totalAmount = Σ (quantity × unitPrice)\n\nsaleType: AVISTA | FIADO\nstatus: ABERTO | ENTREGUE | CANCELADO"
           },
           "event": [
             {
@@ -339,18 +302,29 @@
           ]
         },
         {
-          "name": "Atualizar Pedido (Status)",
+          "name": "Criar Pedido - Fiado (com vencimento)",
           "request": {
-            "method": "PUT",
-            "url": "{{baseUrl}}/api/orders/{{orderId}}",
-            "header": [
-              { "key": "Content-Type", "value": "application/json" }
-            ],
+            "method": "POST",
+            "url": "{{baseUrl}}/api/orders",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"status\": \"CANCELADO\"\n}"
+              "raw": "{\n  \"clientId\": \"{{clientId}}\",\n  \"saleType\": \"FIADO\",\n  \"dueDate\": \"2026-07-04\",\n  \"status\": \"ABERTO\",\n  \"items\": [\n    {\n      \"inboundItemId\": \"{{inboundItemId}}\",\n      \"quantity\": 10,\n      \"unitPrice\": 58.00\n    }\n  ]\n}"
             },
-            "description": "Atualiza campos de um pedido existente. Útil para alterar o status (ex: ABERTO → FINALIZADO ou CANCELADO).\n\nATENÇÃO: Esta rota NÃO recalcula o availableQuantity dos lotes. Serve apenas para atualização de metadados do pedido."
+            "description": "Venda fiado com data de vencimento (due_date)."
+          }
+        },
+        {
+          "name": "Atualizar Status do Pedido",
+          "request": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/api/orders/{{orderId}}/status",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"ENTREGUE\"\n}"
+            },
+            "description": "Altera status do pedido.\nValores válidos: ABERTO | ENTREGUE | CANCELADO\n\nATENÇÃO: NÃO estorna estoque automaticamente."
           }
         },
         {
@@ -358,7 +332,7 @@
           "request": {
             "method": "DELETE",
             "url": "{{baseUrl}}/api/orders/{{orderId}}",
-            "description": "Remove um pedido do sistema. ATENÇÃO: NÃO estorna o estoque automaticamente."
+            "description": "Remove um pedido. ATENÇÃO: NÃO estorna estoque."
           }
         }
       ]

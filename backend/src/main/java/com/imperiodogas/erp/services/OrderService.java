@@ -2,6 +2,7 @@ package com.imperiodogas.erp.services;
 
 import com.imperiodogas.erp.models.Order;
 import com.imperiodogas.erp.models.OrderItem;
+import com.imperiodogas.erp.models.OrderStatus;
 import com.imperiodogas.erp.models.InboundItem;
 import com.imperiodogas.erp.repositories.OrderRepository;
 import com.imperiodogas.erp.repositories.InboundItemRepository;
@@ -38,14 +39,33 @@ public class OrderService {
     @Transactional
     public Order createFromDto(OrderRequestDTO dto) {
         Order order = new Order();
-        if (dto.getClientId() != null) {
-            order.setClient(clientRepository.findById(dto.getClientId()).orElse(null));
+
+        // client_id é NOT NULL no banco — lança exceção se não encontrado
+        if (dto.getClientId() == null) {
+            throw new RuntimeException("clientId é obrigatório.");
         }
+        order.setClient(clientRepository.findById(dto.getClientId())
+                .orElseThrow(() -> new RuntimeException("Cliente não encontrado: " + dto.getClientId())));
+
         if (dto.getDriverId() != null) {
             order.setDeliveryDriverId(dto.getDriverId());
         }
+        if (dto.getDeliveryAddressId() != null) {
+            order.setDeliveryAddressId(dto.getDeliveryAddressId());
+        }
+
+        // sale_type é NOT NULL (ENUM sale_type: AVISTA | FIADO)
+        if (dto.getSaleType() == null) {
+            throw new RuntimeException("saleType é obrigatório. Valores válidos: AVISTA, FIADO");
+        }
         order.setSaleType(dto.getSaleType());
-        order.setStatus(dto.getStatus() == null ? "ABERTO" : dto.getStatus());
+
+        // status padrão = ABERTO (order_status ENUM: ABERTO | ENTREGUE | CANCELADO)
+        order.setStatus(dto.getStatus() == null ? OrderStatus.ABERTO : dto.getStatus());
+
+        if (dto.getDueDate() != null) {
+            order.setDueDate(dto.getDueDate());
+        }
 
         BigDecimal total = BigDecimal.ZERO;
         List<OrderItem> items = new ArrayList<>();
@@ -53,7 +73,7 @@ public class OrderService {
         if (dto.getItems() != null) {
             for (OrderRequestDTO.OrderItemDTO itemDto : dto.getItems()) {
                 InboundItem inboundItem = inboundItemRepository.findById(itemDto.getInboundItemId())
-                        .orElseThrow(() -> new RuntimeException("InboundItem not found"));
+                        .orElseThrow(() -> new RuntimeException("InboundItem não encontrado: " + itemDto.getInboundItemId()));
 
                 if (inboundItem.getAvailableQuantity() < itemDto.getQuantity()) {
                     throw new RuntimeException("Quantidade insuficiente em estoque para o lote selecionado.");
@@ -75,7 +95,7 @@ public class OrderService {
                 }
             }
         }
-        
+
         order.setItems(items);
         order.setTotalAmount(total);
 

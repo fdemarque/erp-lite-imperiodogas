@@ -1,6 +1,7 @@
 package com.imperiodogas.erp.controllers;
 
 import com.imperiodogas.erp.dto.ApiResponse;
+import com.imperiodogas.erp.dto.PersonRequestDTO;
 import com.imperiodogas.erp.models.Person;
 import com.imperiodogas.erp.services.PersonService;
 import org.springframework.web.bind.annotation.*;
@@ -27,14 +28,13 @@ public class PersonController {
     }
 
     @PostMapping
-    public ApiResponse<Person> create(@RequestBody Person person) {
-        return new ApiResponse<>(true, service.save(person));
+    public ApiResponse<Person> create(@RequestBody PersonRequestDTO dto) {
+        return new ApiResponse<>(true, service.createFromDto(dto));
     }
 
     @PutMapping("/{id}")
-    public ApiResponse<Person> update(@PathVariable UUID id, @RequestBody Person person) {
-        person.setId(id);
-        return new ApiResponse<>(true, service.save(person));
+    public ApiResponse<Person> update(@PathVariable UUID id, @RequestBody PersonRequestDTO dto) {
+        return new ApiResponse<>(true, service.updateFromDto(id, dto));
     }
 
     @DeleteMapping("/{id}")
