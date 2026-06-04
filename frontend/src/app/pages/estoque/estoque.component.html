@@ -150,18 +150,29 @@
         <div class="p-6 border-b border-slate-100">
           <h3 class="text-lg font-semibold text-slate-800 m-0">Novo Produto</h3>
         </div>
-        <div class="p-6 space-y-4">
+        <div class="p-6 space-y-4" [formGroup]="productForm">
           <div class="space-y-2">
-            <label class="text-slate-600 block font-medium text-sm">Nome do Produto</label>
-            <input class="w-full h-10 rounded-lg border border-slate-300 px-3 text-sm" [(ngModel)]="productForm.name" placeholder="Ex: GLP 13kg" />
+            <label class="text-slate-600 block font-medium text-sm">Produto</label>
+            <select formControlName="tipoProduto" class="w-full h-10 rounded-lg border border-slate-300 px-3 text-sm">
+              <option value="GLP 13Kg">GLP 13Kg</option>
+              <option value="GLP 20Kg">GLP 20Kg</option>
+              <option value="GLP 45Kg">GLP 45Kg</option>
+            </select>
+          </div>
+          <div class="space-y-2">
+            <label class="text-slate-600 block font-medium text-sm">Estado</label>
+            <select formControlName="estadoProduto" class="w-full h-10 rounded-lg border border-slate-300 px-3 text-sm">
+              <option value="Cheio">Cheio</option>
+              <option value="Vazio">Vazio</option>
+            </select>
           </div>
           <div class="space-y-2">
             <label class="text-slate-600 block font-medium text-sm">Preço Atual (R$)</label>
-            <input type="number" step="0.01" class="w-full h-10 rounded-lg border border-slate-300 px-3 text-sm" [(ngModel)]="productForm.current_price" />
+            <input type="number" step="0.01" formControlName="current_price" class="w-full h-10 rounded-lg border border-slate-300 px-3 text-sm" />
           </div>
           <div class="space-y-2">
             <label class="text-slate-600 block font-medium text-sm">Status</label>
-            <select class="w-full h-10 rounded-lg border border-slate-300 px-3 text-sm" [(ngModel)]="productForm.status">
+            <select formControlName="status" class="w-full h-10 rounded-lg border border-slate-300 px-3 text-sm">
               <option value="ATIVO">Ativo</option>
               <option value="INATIVO">Inativo</option>
             </select>

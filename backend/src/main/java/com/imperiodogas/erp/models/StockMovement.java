@@ -25,15 +25,15 @@ public class StockMovement {
 
     private Integer quantity;
 
-    @Column(name = "unit_price")
+    @Transient
     @JsonProperty("unit_price")
     private Double unitPrice;
 
-    @Column(name = "invoice_number")
+    @Transient
     @JsonProperty("invoice_number")
     private String invoiceNumber;
 
-    @Column(name = "truck_plate")
+    @Transient
     @JsonProperty("truck_plate")
     private String truckPlate;
 

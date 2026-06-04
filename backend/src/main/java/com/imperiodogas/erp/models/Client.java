@@ -13,14 +13,19 @@ public class Client {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(name = "person_type")
+    @Transient
     private String personType;
 
+    @Transient
     private String name;
+    
+    @Transient
     private String document;
+    
+    @Transient
     private String phone;
     
-    @Column(name = "trade_name")
+    @Transient
     private String tradeName;
     
     @Column(name = "payment_deadline_days")

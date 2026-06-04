@@ -23,7 +23,7 @@ public class Order {
 
     @Column(name = "total_amount")
     @JsonProperty("total_amount")
-    private Double totalAmount;
+    private java.math.BigDecimal totalAmount;
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
@@ -36,6 +36,6 @@ public class Order {
     private Client client;
 
     @ManyToOne
-    @JoinColumn(name = "driver_id")
+    @JoinColumn(name = "delivery_driver_id")
     private Person driver;
 }

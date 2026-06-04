@@ -1,5 +1,5 @@
 import { Component, signal, OnInit, inject } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { StockService, StockBalance, StockHistory } from '../../services/stock.service';
 import { ProductService, Product } from '../../services/product.service';
 import { formatDate, formatCurrency } from '../../utils/formatters';
@@ -7,12 +7,13 @@ import { formatDate, formatCurrency } from '../../utils/formatters';
 @Component({
   selector: 'app-estoque',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, ReactiveFormsModule],
   templateUrl: './estoque.component.html',
 })
 export class EstoqueComponent implements OnInit {
   private readonly stockService = inject(StockService);
   private readonly productService = inject(ProductService);
+  private readonly fb = inject(FormBuilder);
 
   formatDate = formatDate;
   formatCurrency = formatCurrency;
@@ -24,7 +25,12 @@ export class EstoqueComponent implements OnInit {
   
   // Produtos (modal)
   isProductModalOpen = signal(false);
-  productForm = { name: '', current_price: 0, status: 'ATIVO' };
+  productForm: FormGroup = this.fb.group({
+    tipoProduto: ['GLP 13Kg', Validators.required],
+    estadoProduto: ['Cheio', Validators.required],
+    current_price: [0, [Validators.required, Validators.min(0)]],
+    status: ['ATIVO', Validators.required]
+  });
   productsList = signal<Product[]>([]);
 
   // Histórico
@@ -51,12 +57,23 @@ export class EstoqueComponent implements OnInit {
   }
 
   handleOpenNewProduct() {
-    this.productForm = { name: '', current_price: 0, status: 'ATIVO' };
+    this.productForm.reset({ tipoProduto: 'GLP 13Kg', estadoProduto: 'Cheio', current_price: 0, status: 'ATIVO' });
     this.isProductModalOpen.set(true);
   }
 
   handleSaveProduct() {
-    this.productService.create(this.productForm).subscribe(() => {
+    if (this.productForm.invalid) return;
+
+    const { tipoProduto, estadoProduto, current_price, status } = this.productForm.value;
+    const name = `${tipoProduto} - ${estadoProduto}`;
+
+    const payload = {
+      name,
+      current_price,
+      status
+    };
+
+    this.productService.create(payload as any).subscribe(() => {
       this.isProductModalOpen.set(false);
       this.loadProducts();
       this.loadBalances();

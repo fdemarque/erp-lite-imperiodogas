@@ -16,5 +16,6 @@ public class Person {
     private String name;
     private String document;
     private String phone;
+    @Column(name = "person_type")
     private String type; // e.g. MOTORISTA
 }

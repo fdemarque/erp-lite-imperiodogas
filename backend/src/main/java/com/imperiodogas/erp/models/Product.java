@@ -15,7 +15,8 @@ public class Product {
     private String name;
     
     @Column(name = "current_price")
-    private Double currentPrice;
+    private java.math.BigDecimal currentPrice;
     
+    @Transient
     private String status;
 }
