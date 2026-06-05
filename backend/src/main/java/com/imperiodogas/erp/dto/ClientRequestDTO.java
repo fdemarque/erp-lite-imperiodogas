@@ -28,6 +28,24 @@ public class ClientRequestDTO {
     @JsonProperty("trade_name")
     private String tradeName;
 
+    @JsonProperty("street")
+    private String street;
+
+    @JsonProperty("number")
+    private String number;
+
+    @JsonProperty("neighborhood")
+    private String neighborhood;
+
+    @JsonProperty("city")
+    private String city;
+
+    @JsonProperty("state")
+    private String state;
+
+    @JsonProperty("zip_code")
+    private String zipCode;
+
     // Campos do Cliente
     @JsonProperty("person_id")
     private UUID personId;

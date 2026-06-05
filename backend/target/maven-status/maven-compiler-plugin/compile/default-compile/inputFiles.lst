@@ -1,4 +1,5 @@
 /home/demarque/Documentos/erp-automacao/backend/src/main/java/com/imperiodogas/erp/dto/PersonRequestDTO.java
+/home/demarque/Documentos/erp-automacao/backend/src/main/java/com/imperiodogas/erp/controllers/DashboardController.java
 /home/demarque/Documentos/erp-automacao/backend/src/main/java/com/imperiodogas/erp/services/UserService.java
 /home/demarque/Documentos/erp-automacao/backend/src/main/java/com/imperiodogas/erp/dto/OrderRequestDTO.java
 /home/demarque/Documentos/erp-automacao/backend/src/main/java/com/imperiodogas/erp/models/InboundItem.java
@@ -19,6 +20,8 @@
 /home/demarque/Documentos/erp-automacao/backend/src/main/java/com/imperiodogas/erp/models/PersonType.java
 /home/demarque/Documentos/erp-automacao/backend/src/main/java/com/imperiodogas/erp/services/OrderService.java
 /home/demarque/Documentos/erp-automacao/backend/src/main/java/com/imperiodogas/erp/models/OrderStatus.java
+/home/demarque/Documentos/erp-automacao/backend/src/main/java/com/imperiodogas/erp/DatabaseUpdater.java
+/home/demarque/Documentos/erp-automacao/backend/src/main/java/com/imperiodogas/erp/services/DashboardService.java
 /home/demarque/Documentos/erp-automacao/backend/src/main/java/com/imperiodogas/erp/dto/ClientRequestDTO.java
 /home/demarque/Documentos/erp-automacao/backend/src/main/java/com/imperiodogas/erp/controllers/InboundController.java
 /home/demarque/Documentos/erp-automacao/backend/src/main/java/com/imperiodogas/erp/repositories/ClientRepository.java
@@ -29,6 +32,7 @@
 /home/demarque/Documentos/erp-automacao/backend/src/main/java/com/imperiodogas/erp/controllers/OrderController.java
 /home/demarque/Documentos/erp-automacao/backend/src/main/java/com/imperiodogas/erp/controllers/ClientController.java
 /home/demarque/Documentos/erp-automacao/backend/src/main/java/com/imperiodogas/erp/controllers/PersonController.java
+/home/demarque/Documentos/erp-automacao/backend/src/main/java/com/imperiodogas/erp/dto/DashboardResponseDTO.java
 /home/demarque/Documentos/erp-automacao/backend/src/main/java/com/imperiodogas/erp/models/ProductCategory.java
 /home/demarque/Documentos/erp-automacao/backend/src/main/java/com/imperiodogas/erp/services/ClientService.java
 /home/demarque/Documentos/erp-automacao/backend/src/main/java/com/imperiodogas/erp/services/PersonService.java

@@ -127,7 +127,7 @@ export class EntradasComponent implements OnInit {
       case 'FINALIZADO': return 'bg-green-50 text-green-700 border-green-200';
       case 'ABERTO': return 'bg-amber-50 text-amber-700 border-amber-200';
       case 'CANCELADO': return 'bg-red-50 text-red-600 border-red-200';
-      default: return 'bg-slate-50 text-slate-600 border-slate-200';
+      default: return 'bg-slate-50 dark:bg-zinc-800/50 text-slate-600 dark:text-zinc-300 border-slate-200 dark:border-zinc-700';
     }
   }
 }

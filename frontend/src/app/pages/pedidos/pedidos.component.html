@@ -2,68 +2,68 @@
 <div class="space-y-8">
   <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
     <div>
-      <h2 class="text-2xl font-bold tracking-tight text-slate-800 flex items-center gap-2 m-0">
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+      <h2 class="text-2xl font-bold tracking-tight text-slate-800 dark:text-zinc-100 flex items-center gap-2 m-0">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
         Vendas e Pedidos
       </h2>
-      <p class="text-slate-500 mt-1 mb-0">Gerencie ordens de serviço, vendas rápidas e entregas.</p>
+      <p class="text-slate-500 dark:text-zinc-400 mt-1 mb-0">Gerencie ordens de serviço, vendas rápidas e entregas.</p>
     </div>
-    <button (click)="openNewOrderModal()" class="rounded-lg h-10 px-4 shadow-sm text-base font-medium flex items-center gap-2 bg-slate-900 text-white hover:bg-slate-800 transition-colors cursor-pointer border-none">
+    <button (click)="openNewOrderModal()" class="rounded-lg h-10 px-4 shadow-sm text-base font-medium flex items-center gap-2 bg-emerald-600 text-white hover:bg-emerald-700 transition-colors cursor-pointer border-none">
       <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" /></svg>
       Nova Venda
     </button>
   </div>
 
   <!-- Search -->
-  <div class="bg-white border border-slate-100 shadow-sm rounded-2xl p-4">
+  <div class="bg-white dark:bg-zinc-900 border border-slate-100 dark:border-zinc-800 shadow-sm rounded-2xl p-4">
     <div class="flex-1 space-y-2 max-w-md">
-      <label class="text-slate-600 block text-sm">Buscar Vendas</label>
+      <label class="text-slate-600 dark:text-zinc-300 block text-sm">Buscar Vendas</label>
       <div class="relative">
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-        <input type="text" placeholder="Cliente, ID ou Entregador" class="w-full pl-10 pr-4 h-10 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-slate-400 text-sm" [(ngModel)]="search" (ngModelChange)="updateFiltered()" />
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-slate-400 dark:text-zinc-500 absolute left-3 top-1/2 -translate-y-1/2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+        <input type="text" placeholder="Cliente, ID ou Entregador" class="w-full pl-10 pr-4 h-10 rounded-lg border border-slate-200 dark:border-zinc-700 focus:outline-none focus:ring-2 focus:ring-slate-400 text-sm dark:text-white dark:bg-zinc-900" [(ngModel)]="search" (ngModelChange)="updateFiltered()" />
       </div>
     </div>
   </div>
 
   <!-- Table -->
-  <div class="bg-white border border-slate-100 shadow-sm rounded-2xl overflow-hidden">
+  <div class="bg-white dark:bg-zinc-900 border border-slate-100 dark:border-zinc-800 shadow-sm rounded-2xl overflow-hidden">
     <table class="w-full">
       <thead>
-        <tr class="border-b border-slate-100">
-          <th class="text-left py-3 px-4 text-sm font-medium text-slate-500">ID / Data</th>
-          <th class="text-left py-3 px-4 text-sm font-medium text-slate-500">Cliente</th>
-          <th class="text-left py-3 px-4 text-sm font-medium text-slate-500">Entregador</th>
-          <th class="text-right py-3 px-4 text-sm font-medium text-slate-500">Valor</th>
-          <th class="text-center py-3 px-4 text-sm font-medium text-slate-500">Status</th>
-          <th class="text-right py-3 px-4 text-sm font-medium text-slate-500">Ações</th>
+        <tr class="border-b border-slate-100 dark:border-zinc-800">
+          <th class="text-left py-3 px-4 text-sm font-medium text-slate-500 dark:text-zinc-400">ID / Data</th>
+          <th class="text-left py-3 px-4 text-sm font-medium text-slate-500 dark:text-zinc-400">Cliente</th>
+          <th class="text-left py-3 px-4 text-sm font-medium text-slate-500 dark:text-zinc-400">Entregador</th>
+          <th class="text-right py-3 px-4 text-sm font-medium text-slate-500 dark:text-zinc-400">Valor</th>
+          <th class="text-center py-3 px-4 text-sm font-medium text-slate-500 dark:text-zinc-400">Status</th>
+          <th class="text-right py-3 px-4 text-sm font-medium text-slate-500 dark:text-zinc-400">Ações</th>
         </tr>
       </thead>
       <tbody>
         @for (order of filteredOrders(); track order.id) {
-          <tr class="border-b border-slate-50 hover:bg-slate-50/50 transition-colors">
+          <tr class="border-b border-slate-50 dark:border-zinc-800/50 hover:outline hover:outline-2 hover:-outline-offset-2 hover:outline-emerald-500 relative hover:z-10 transition-colors">
             <td class="py-3 px-4">
-              <p class="font-semibold text-slate-800 m-0">#{{ order.id.slice(0, 6).toUpperCase() }}</p>
-              <p class="text-xs text-slate-500 m-0">{{ formatDate(order.created_at) }}</p>
+              <p class="font-semibold text-slate-800 dark:text-zinc-100 m-0">#{{ order.id.slice(0, 6).toUpperCase() }}</p>
+              <p class="text-xs text-slate-500 dark:text-zinc-400 m-0">{{ formatDate(order.created_at) }}</p>
             </td>
             <td class="py-3 px-4">
-              <span class="font-medium text-slate-700">{{ order.client_name || '-' }}</span>
+              <span class="font-medium text-slate-700 dark:text-zinc-200">{{ order.client_name || '-' }}</span>
             </td>
             <td class="py-3 px-4">
               @if (order.driver_name) {
-                <span class="text-slate-600">{{ order.driver_name }}</span>
+                <span class="text-slate-600 dark:text-zinc-300">{{ order.driver_name }}</span>
               } @else {
-                <span class="text-slate-400 italic">Retirada</span>
+                <span class="text-slate-400 dark:text-zinc-500 italic">Retirada</span>
               }
             </td>
             <td class="py-3 px-4 text-right">
-              <p class="font-bold text-slate-800 m-0">{{ formatCurrency(order.total_amount) }}</p>
-              <p class="text-xs text-slate-500 m-0">{{ order.sale_type }}</p>
+              <p class="font-bold text-slate-800 dark:text-zinc-100 m-0">{{ formatCurrency(order.total_amount) }}</p>
+              <p class="text-xs text-slate-500 dark:text-zinc-400 m-0">{{ order.sale_type }}</p>
             </td>
             <td class="py-3 px-4 text-center">
               <span class="inline-block px-2 py-0.5 rounded text-xs font-medium border" [class]="getStatusClass(order.status)">{{ getStatusLabel(order.status) }}</span>
             </td>
             <td class="py-3 px-4 text-right">
-              <button (click)="viewingOrder.set(order)" class="p-1.5 text-slate-400 hover:text-slate-600 cursor-pointer bg-transparent border-none">
+              <button (click)="viewingOrder.set(order)" class="p-1.5 text-slate-400 dark:text-zinc-500 hover:text-slate-600 dark:text-zinc-300 cursor-pointer bg-transparent border-none">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
               </button>
             </td>
@@ -77,38 +77,38 @@
   <!-- View Details Modal -->
   @if (viewingOrder()) {
     <div class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" (click)="viewingOrder.set(null)">
-      <div class="bg-white rounded-2xl w-full max-w-[500px] shadow-xl" (click)="$event.stopPropagation()">
-        <div class="p-6 border-b border-slate-100">
-          <h3 class="text-lg font-semibold text-slate-800 m-0">Detalhes do Pedido</h3>
+      <div class="bg-white dark:bg-zinc-900 rounded-2xl w-full max-w-[500px] shadow-xl" (click)="$event.stopPropagation()">
+        <div class="p-6 border-b border-slate-100 dark:border-zinc-800">
+          <h3 class="text-lg font-semibold text-slate-800 dark:text-zinc-100 m-0">Detalhes do Pedido</h3>
         </div>
         <div class="p-6 space-y-6">
           <div class="flex justify-between items-start">
             <div>
-              <p class="text-sm text-slate-500 m-0">Cliente</p>
-              <p class="font-semibold text-slate-800 m-0">{{ viewingOrder()!.client_name || '-' }}</p>
+              <p class="text-sm text-slate-500 dark:text-zinc-400 m-0">Cliente</p>
+              <p class="font-semibold text-slate-800 dark:text-zinc-100 m-0">{{ viewingOrder()!.client_name || '-' }}</p>
             </div>
             <div class="text-right">
-              <p class="text-sm text-slate-500 m-0">Data</p>
-              <p class="font-medium text-slate-800 m-0">{{ formatDate(viewingOrder()!.created_at) }}</p>
+              <p class="text-sm text-slate-500 dark:text-zinc-400 m-0">Data</p>
+              <p class="font-medium text-slate-800 dark:text-zinc-100 m-0">{{ formatDate(viewingOrder()!.created_at) }}</p>
             </div>
           </div>
           <div class="flex justify-between items-start">
             <div>
-              <p class="text-sm text-slate-500 m-0">Modo</p>
-              <p class="font-medium text-slate-700 m-0">{{ viewingOrder()!.sale_type }}</p>
+              <p class="text-sm text-slate-500 dark:text-zinc-400 m-0">Modo</p>
+              <p class="font-medium text-slate-700 dark:text-zinc-200 m-0">{{ viewingOrder()!.sale_type }}</p>
             </div>
             <div class="text-right">
-              <p class="text-sm text-slate-500 m-0">Entregador</p>
-              <p class="font-medium text-slate-700 m-0">{{ viewingOrder()!.driver_name || 'Retirada' }}</p>
+              <p class="text-sm text-slate-500 dark:text-zinc-400 m-0">Entregador</p>
+              <p class="font-medium text-slate-700 dark:text-zinc-200 m-0">{{ viewingOrder()!.driver_name || 'Retirada' }}</p>
             </div>
           </div>
-          <div class="flex justify-between items-center pt-4 border-t border-slate-100 mt-2">
-            <p class="text-slate-600 font-medium m-0">Total Geral</p>
-            <p class="text-xl font-bold text-orange-600 m-0">{{ formatCurrency(viewingOrder()!.total_amount) }}</p>
+          <div class="flex justify-between items-center pt-4 border-t border-slate-100 dark:border-zinc-800 mt-2">
+            <p class="text-slate-600 dark:text-zinc-300 font-medium m-0">Total Geral</p>
+            <p class="text-xl font-bold text-emerald-600 m-0">{{ formatCurrency(viewingOrder()!.total_amount) }}</p>
           </div>
         </div>
-        <div class="p-6 border-t border-slate-100">
-          <button (click)="viewingOrder.set(null)" class="w-full h-10 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium cursor-pointer border-none">Fechar</button>
+        <div class="p-6 border-t border-slate-100 dark:border-zinc-800">
+          <button (click)="viewingOrder.set(null)" class="w-full h-10 rounded-xl bg-slate-100 dark:bg-zinc-800 hover:bg-slate-200 text-slate-700 dark:text-zinc-200 font-medium cursor-pointer border-none">Fechar</button>
         </div>
       </div>
     </div>
@@ -117,19 +117,19 @@
   <!-- Master-Detail Modal: Novo Pedido -->
   @if (isNewOrderOpen()) {
   <div class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" (click)="isNewOrderOpen.set(false)">
-    <div class="bg-white rounded-2xl w-full max-w-[800px] shadow-xl max-h-[90vh] flex flex-col" (click)="$event.stopPropagation()">
-      <div class="p-6 border-b border-slate-100 shrink-0">
-        <h3 class="text-lg font-semibold text-slate-800 m-0">Registrar Nova Venda</h3>
+    <div class="bg-white dark:bg-zinc-900 rounded-2xl w-full max-w-[800px] shadow-xl max-h-[90vh] flex flex-col" (click)="$event.stopPropagation()">
+      <div class="p-6 border-b border-slate-100 dark:border-zinc-800 shrink-0">
+        <h3 class="text-lg font-semibold text-slate-800 dark:text-zinc-100 m-0">Registrar Nova Venda</h3>
       </div>
 
       <div class="p-6 overflow-y-auto space-y-8 flex-1">
         <!-- Cabeçalho -->
         <div>
-          <h4 class="text-sm font-bold text-slate-700 uppercase tracking-wider mb-4 border-b border-slate-100 pb-2">1. Dados da Venda</h4>
-          <div class="grid grid-cols-2 gap-4">
+          <h4 class="text-sm font-bold text-slate-700 dark:text-zinc-200 uppercase tracking-wider mb-4 border-b border-slate-100 dark:border-zinc-800 pb-2">1. Dados da Venda</h4>
+          <div class="grid grid-cols-3 gap-4">
             <div class="space-y-2">
-              <label class="text-slate-600 block font-medium text-sm">Cliente (Opcional)</label>
-              <select class="w-full h-10 rounded-lg border border-slate-300 px-3 text-sm bg-white focus:border-blue-500 focus:outline-none shadow-sm" [(ngModel)]="newOrderPayload.clientId">
+              <label class="text-slate-600 dark:text-zinc-300 block font-medium text-sm">Cliente (Opcional)</label>
+              <select class="w-full h-10 rounded-lg border border-slate-300 dark:border-zinc-600 px-3 text-sm bg-white dark:bg-zinc-900 focus:border-blue-500 focus:outline-none shadow-sm dark:text-white" [(ngModel)]="newOrderPayload.clientId">
                 <option [ngValue]="null">Venda Avulsa</option>
                 @for (c of clients(); track c.id) {
                   <option [value]="c.id">{{ c.trade_name || c.name }}</option>
@@ -137,12 +137,20 @@
               </select>
             </div>
             <div class="space-y-2">
-              <label class="text-slate-600 block font-medium text-sm">Entregador</label>
-              <select class="w-full h-10 rounded-lg border border-slate-300 px-3 text-sm bg-white focus:border-blue-500 focus:outline-none shadow-sm" [(ngModel)]="newOrderPayload.driverId">
+              <label class="text-slate-600 dark:text-zinc-300 block font-medium text-sm">Entregador</label>
+              <select class="w-full h-10 rounded-lg border border-slate-300 dark:border-zinc-600 px-3 text-sm bg-white dark:bg-zinc-900 focus:border-blue-500 focus:outline-none shadow-sm dark:text-white" [(ngModel)]="newOrderPayload.driverId">
                 <option [ngValue]="null">Retirada no Local</option>
                 @for (d of deliverers(); track d.id) {
                   <option [value]="d.id">{{ d.person.name }}</option>
                 }
+              </select>
+            </div>
+            <div class="space-y-2">
+              <label class="text-slate-600 dark:text-zinc-300 block font-medium text-sm">Forma de Pagto</label>
+              <select class="w-full h-10 rounded-lg border border-slate-300 dark:border-zinc-600 px-3 text-sm bg-white dark:bg-zinc-900 focus:border-blue-500 focus:outline-none shadow-sm dark:text-white" [(ngModel)]="newOrderPayload.saleType">
+                <option value="AVISTA">À Vista</option>
+                <option value="CARTAO">Cartão</option>
+                <option value="FIADO">Fiado</option>
               </select>
             </div>
           </div>
@@ -150,12 +158,12 @@
 
         <!-- Adição de Itens com Cascata -->
         <div>
-          <h4 class="text-sm font-bold text-slate-700 uppercase tracking-wider mb-4 border-b border-slate-100 pb-2">2. Itens da Venda</h4>
+          <h4 class="text-sm font-bold text-slate-700 dark:text-zinc-200 uppercase tracking-wider mb-4 border-b border-slate-100 dark:border-zinc-800 pb-2">2. Itens da Venda</h4>
           <div class="grid grid-cols-12 gap-3 items-end">
             <!-- Passo A -->
             <div class="col-span-3 space-y-2">
-              <label class="text-slate-600 block text-xs font-medium">Remessa / Lote</label>
-              <select class="w-full h-10 rounded-lg border border-slate-300 px-3 text-sm bg-white focus:border-blue-500" [(ngModel)]="selectedInboundId" (ngModelChange)="onInboundChange()">
+              <label class="text-slate-600 dark:text-zinc-300 block text-xs font-medium">Remessa / Lote</label>
+              <select class="w-full h-10 rounded-lg border border-slate-300 dark:border-zinc-600 px-3 text-sm bg-white dark:bg-zinc-900 focus:border-blue-500 dark:text-white" [(ngModel)]="selectedInboundId" (ngModelChange)="onInboundChange()">
                 <option value="" disabled selected>Selecione um lote</option>
                 @for (ib of inbounds(); track ib.id) {
                   <option [value]="ib.id">{{ formatDate(ib.created_at) }} - NF: {{ ib.invoice_number || '-' }}</option>
@@ -165,8 +173,8 @@
 
             <!-- Passo B -->
             <div class="col-span-3 space-y-2">
-              <label class="text-slate-600 block text-xs font-medium">Produto / Categoria</label>
-              <select class="w-full h-10 rounded-lg border border-slate-300 px-3 text-sm bg-white focus:border-blue-500" [(ngModel)]="currentItem.inboundItemId" (ngModelChange)="onCategoryChange()" [disabled]="!selectedInboundId()">
+              <label class="text-slate-600 dark:text-zinc-300 block text-xs font-medium">Produto / Categoria</label>
+              <select class="w-full h-10 rounded-lg border border-slate-300 dark:border-zinc-600 px-3 text-sm bg-white dark:bg-zinc-900 focus:border-blue-500 dark:text-white" [(ngModel)]="currentItem.inboundItemId" (ngModelChange)="onCategoryChange()" [disabled]="!selectedInboundId()">
                 <option value="" disabled selected>Categoria</option>
                 @for (cat of availableCategories(); track cat.id) {
                   <option [value]="cat.id">{{ cat.category }} ({{ cat.availableQuantity }} Disp)</option>
@@ -176,44 +184,44 @@
 
             <!-- Passo C -->
             <div class="col-span-2 space-y-2">
-              <label class="text-slate-600 block text-xs font-medium">Qtd.</label>
-              <input type="number" min="1" class="w-full h-10 rounded-lg border border-slate-300 px-3 text-sm" [(ngModel)]="currentItem.quantity" [disabled]="!currentItem.inboundItemId" />
+              <label class="text-slate-600 dark:text-zinc-300 block text-xs font-medium">Qtd.</label>
+              <input type="number" min="1" class="w-full h-10 rounded-lg border border-slate-300 dark:border-zinc-600 px-3 text-sm dark:text-white dark:bg-zinc-900" [(ngModel)]="currentItem.quantity" [disabled]="!currentItem.inboundItemId" />
             </div>
             
             <div class="col-span-3 space-y-2">
-              <label class="text-slate-600 block text-xs font-medium">Valor Unitário (Venda)</label>
-              <input type="number" step="0.01" placeholder="0.00" class="w-full h-10 rounded-lg border border-slate-300 px-3 text-sm" [(ngModel)]="currentItem.unitPrice" [disabled]="!currentItem.inboundItemId" />
+              <label class="text-slate-600 dark:text-zinc-300 block text-xs font-medium">Valor Unitário (Venda)</label>
+              <input type="number" step="0.01" placeholder="0.00" class="w-full h-10 rounded-lg border border-slate-300 dark:border-zinc-600 px-3 text-sm dark:text-white dark:bg-zinc-900" [(ngModel)]="currentItem.unitPrice" [disabled]="!currentItem.inboundItemId" />
             </div>
             
             <!-- Botão Adicionar -->
             <div class="col-span-1">
-              <button (click)="addItem()" [disabled]="!currentItem.inboundItemId || !currentItem.quantity || !currentItem.unitPrice" class="h-10 w-full rounded-lg bg-orange-50 text-orange-600 hover:bg-orange-100 border border-orange-200 flex items-center justify-center transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+              <button (click)="addItem()" [disabled]="!currentItem.inboundItemId || !currentItem.quantity || !currentItem.unitPrice" class="h-10 w-full rounded-lg bg-emerald-50 text-emerald-600 hover:bg-emerald-100 border border-emerald-200 flex items-center justify-center transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" /></svg>
               </button>
             </div>
           </div>
 
           <!-- Tabela Temporária -->
-          <div class="mt-6 border border-slate-200 rounded-lg overflow-hidden">
+          <div class="mt-6 border border-slate-200 dark:border-zinc-700 rounded-lg overflow-hidden">
             <table class="w-full text-sm">
-              <thead class="bg-slate-50 border-b border-slate-200">
+              <thead class="bg-slate-50 dark:bg-zinc-800/50 border-b border-slate-200 dark:border-zinc-700">
                 <tr>
-                  <th class="text-left py-2 px-3 font-medium text-slate-600">Categoria Produto</th>
-                  <th class="text-right py-2 px-3 font-medium text-slate-600">Qtd</th>
-                  <th class="text-right py-2 px-3 font-medium text-slate-600">V. Unitário</th>
-                  <th class="text-right py-2 px-3 font-medium text-slate-600">Total</th>
+                  <th class="text-left py-2 px-3 font-medium text-slate-600 dark:text-zinc-300">Categoria Produto</th>
+                  <th class="text-right py-2 px-3 font-medium text-slate-600 dark:text-zinc-300">Qtd</th>
+                  <th class="text-right py-2 px-3 font-medium text-slate-600 dark:text-zinc-300">V. Unitário</th>
+                  <th class="text-right py-2 px-3 font-medium text-slate-600 dark:text-zinc-300">Total</th>
                   <th class="w-10"></th>
                 </tr>
               </thead>
               <tbody>
                 @if (newOrderPayload.items.length === 0) {
                   <tr>
-                    <td colspan="5" class="py-4 text-center text-slate-400">Nenhum item adicionado.</td>
+                    <td colspan="5" class="py-4 text-center text-slate-400 dark:text-zinc-500">Nenhum item adicionado.</td>
                   </tr>
                 }
                 @for (item of newOrderPayload.items; track item.inboundItemId; let idx = $index) {
-                  <tr class="border-b border-slate-50 hover:bg-slate-50/50">
-                    <td class="py-2 px-3 font-medium text-slate-800">{{ item._categoryLabel }}</td>
+                  <tr class="border-b border-slate-50 dark:border-zinc-800/50 hover:outline hover:outline-2 hover:-outline-offset-2 hover:outline-emerald-500 relative hover:z-10">
+                    <td class="py-2 px-3 font-medium text-slate-800 dark:text-zinc-100">{{ item._categoryLabel }}</td>
                     <td class="py-2 px-3 text-right">{{ item.quantity }}</td>
                     <td class="py-2 px-3 text-right">{{ formatCurrency(item.unitPrice) }}</td>
                     <td class="py-2 px-3 text-right font-semibold">{{ formatCurrency(item.quantity * item.unitPrice) }}</td>
@@ -228,15 +236,15 @@
           
           <div class="flex justify-end pt-4 mt-2">
             <div class="text-right">
-              <p class="text-sm text-slate-500 m-0">Total do Pedido</p>
-              <p class="text-2xl font-bold text-orange-600 m-0">{{ formatCurrency(getOrderTotal()) }}</p>
+              <p class="text-sm text-slate-500 dark:text-zinc-400 m-0">Total do Pedido</p>
+              <p class="text-2xl font-bold text-emerald-600 m-0">{{ formatCurrency(getOrderTotal()) }}</p>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="p-6 border-t border-slate-100 flex justify-end gap-3 shrink-0">
-        <button (click)="isNewOrderOpen.set(false)" class="rounded-full h-10 px-6 font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 cursor-pointer border-none">Cancelar</button>
+      <div class="p-6 border-t border-slate-100 dark:border-zinc-800 flex justify-end gap-3 shrink-0">
+        <button (click)="isNewOrderOpen.set(false)" class="rounded-full h-10 px-6 font-medium text-slate-600 dark:text-zinc-300 bg-slate-100 dark:bg-zinc-800 hover:bg-slate-200 cursor-pointer border-none">Cancelar</button>
         <button (click)="saveOrder()" [disabled]="newOrderPayload.items.length === 0" class="rounded-full h-10 px-6 font-medium text-white transition-colors border-none" [class]="newOrderPayload.items.length > 0 ? 'bg-slate-900 hover:bg-slate-800 cursor-pointer' : 'bg-slate-400 cursor-not-allowed'">Salvar Pedido</button>
       </div>
     </div>

@@ -40,6 +40,30 @@ public class Person {
     @JsonProperty("trade_name")
     private String tradeName;
 
+    @Column(name = "street")
+    @JsonProperty("street")
+    private String street;
+
+    @Column(name = "number")
+    @JsonProperty("number")
+    private String number;
+
+    @Column(name = "neighborhood")
+    @JsonProperty("neighborhood")
+    private String neighborhood;
+
+    @Column(name = "city")
+    @JsonProperty("city")
+    private String city;
+
+    @Column(name = "state")
+    @JsonProperty("state")
+    private String state;
+
+    @Column(name = "zip_code")
+    @JsonProperty("zip_code")
+    private String zipCode;
+
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     @JsonProperty("created_at")

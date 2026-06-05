@@ -1,39 +1,39 @@
 <div class="space-y-8">
   <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
     <div>
-      <h2 class="text-2xl font-bold tracking-tight text-slate-800 flex items-center gap-2 m-0">
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <h2 class="text-2xl font-bold tracking-tight text-slate-800 dark:text-zinc-100 flex items-center gap-2 m-0">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
         </svg>
         Estoque de Lotes (Rastreabilidade)
       </h2>
-      <p class="text-slate-500 mt-1 mb-0">Visão consolidada de remessas com saldo disponível.</p>
+      <p class="text-slate-500 dark:text-zinc-400 mt-1 mb-0">Visão consolidada de remessas com saldo disponível.</p>
     </div>
   </div>
 
-  <div class="bg-white border border-slate-100 shadow-sm rounded-2xl overflow-hidden">
+  <div class="bg-white dark:bg-zinc-900 border border-slate-100 dark:border-zinc-800 shadow-sm rounded-2xl overflow-hidden">
     <table class="w-full">
       <thead>
-        <tr class="border-b border-slate-100 bg-slate-50/50">
-          <th class="text-left py-3 px-4 text-sm font-medium text-slate-500">Data da Remessa</th>
-          <th class="text-left py-3 px-4 text-sm font-medium text-slate-500">Nota Fiscal</th>
-          <th class="text-left py-3 px-4 text-sm font-medium text-slate-500">Categoria</th>
-          <th class="text-right py-3 px-4 text-sm font-medium text-slate-500">Custo Unitário</th>
-          <th class="text-right py-3 px-4 text-sm font-medium text-slate-500">Saldo Restante</th>
+        <tr class="border-b border-slate-100 dark:border-zinc-800 bg-slate-50 dark:bg-zinc-800/50/50">
+          <th class="text-left py-3 px-4 text-sm font-medium text-slate-500 dark:text-zinc-400">Data da Remessa</th>
+          <th class="text-left py-3 px-4 text-sm font-medium text-slate-500 dark:text-zinc-400">Nota Fiscal</th>
+          <th class="text-left py-3 px-4 text-sm font-medium text-slate-500 dark:text-zinc-400">Categoria</th>
+          <th class="text-right py-3 px-4 text-sm font-medium text-slate-500 dark:text-zinc-400">Custo Unitário</th>
+          <th class="text-right py-3 px-4 text-sm font-medium text-slate-500 dark:text-zinc-400">Saldo Restante</th>
         </tr>
       </thead>
       <tbody>
         @if (lots().length === 0) {
           <tr>
-            <td colspan="5" class="py-8 text-center text-slate-400">Nenhum lote disponível no momento.</td>
+            <td colspan="5" class="py-8 text-center text-slate-400 dark:text-zinc-500">Nenhum lote disponível no momento.</td>
           </tr>
         }
         @for (lot of lots(); track lot.inboundDate + lot.category) {
-          <tr class="border-b border-slate-50 hover:bg-slate-50/50 transition-colors">
-            <td class="py-3 px-4 text-slate-600 font-medium">
+          <tr class="border-b border-slate-50 dark:border-zinc-800/50 hover:outline hover:outline-2 hover:-outline-offset-2 hover:outline-emerald-500 relative hover:z-10 transition-colors">
+            <td class="py-3 px-4 text-slate-600 dark:text-zinc-300 font-medium">
               {{ formatDate(lot.inboundDate) }}
             </td>
-            <td class="py-3 px-4 text-slate-500">
+            <td class="py-3 px-4 text-slate-500 dark:text-zinc-400">
               {{ lot.invoiceNumber || '-' }}
             </td>
             <td class="py-3 px-4">
@@ -41,7 +41,7 @@
                 {{ lot.category }}
               </span>
             </td>
-            <td class="py-3 px-4 text-right text-slate-600 font-medium">
+            <td class="py-3 px-4 text-right text-slate-600 dark:text-zinc-300 font-medium">
               {{ formatCurrency(lot.unitCost) }}
             </td>
             <td class="py-3 px-4 text-right">

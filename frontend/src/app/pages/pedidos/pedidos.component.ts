@@ -11,7 +11,7 @@ interface Order {
   client_name?: string;
   driver_name?: string;
   sale_type: string;
-  status: 'ABERTO' | 'FINALIZADO' | 'CANCELADO';
+  status: 'ABERTO' | 'ENTREGUE' | 'CANCELADO';
   total_amount: number;
   created_at: string;
 }
@@ -47,7 +47,7 @@ export class PedidosComponent implements OnInit {
   
   currentItem = { inboundItemId: '', quantity: 1, unitPrice: '' as string | number };
   
-  newOrderPayload = { clientId: null as any, driverId: null as any, saleType: 'DINHEIRO', status: 'FINALIZADO', items: [] as any[] };
+  newOrderPayload = { clientId: null as any, driverId: null as any, saleType: 'AVISTA', status: 'ENTREGUE', items: [] as any[] };
 
   ngOnInit() {
     this.loadOrders();
@@ -166,16 +166,16 @@ export class PedidosComponent implements OnInit {
 
   getStatusClass(status: string) {
     switch (status) {
-      case 'FINALIZADO': return 'bg-green-50 text-green-700 border-green-200';
+      case 'ENTREGUE': return 'bg-green-50 text-green-700 border-green-200';
       case 'ABERTO': return 'bg-amber-50 text-amber-700 border-amber-200';
       case 'CANCELADO': return 'bg-red-50 text-red-600 border-red-200';
-      default: return 'bg-slate-50 text-slate-600 border-slate-200';
+      default: return 'bg-slate-50 dark:bg-zinc-800/50 text-slate-600 dark:text-zinc-300 border-slate-200 dark:border-zinc-700';
     }
   }
 
   getStatusLabel(status: string) {
     switch (status) {
-      case 'FINALIZADO': return 'Finalizado';
+      case 'ENTREGUE': return 'Finalizado';
       case 'ABERTO': return 'Aberto (Fiado)';
       case 'CANCELADO': return 'Cancelado';
       default: return status;

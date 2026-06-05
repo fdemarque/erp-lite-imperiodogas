@@ -1,3 +1,4 @@
+com/imperiodogas/erp/services/DashboardService.class
 com/imperiodogas/erp/models/InboundItem.class
 com/imperiodogas/erp/dto/ApiResponse.class
 com/imperiodogas/erp/dto/UserRequestDTO.class
@@ -5,6 +6,8 @@ com/imperiodogas/erp/ErpAutomacaoApplication.class
 com/imperiodogas/erp/models/SaleType.class
 com/imperiodogas/erp/services/OrderService.class
 com/imperiodogas/erp/services/PersonService.class
+com/imperiodogas/erp/DatabaseUpdater.class
+com/imperiodogas/erp/dto/DashboardResponseDTO$NeighborhoodMetric.class
 com/imperiodogas/erp/dto/InboundRequestDTO.class
 com/imperiodogas/erp/models/ProductCategory.class
 com/imperiodogas/erp/models/PersonType.class
@@ -14,6 +17,7 @@ com/imperiodogas/erp/repositories/InboundRepository.class
 com/imperiodogas/erp/models/UserRole.class
 com/imperiodogas/erp/dto/OrderRequestDTO.class
 com/imperiodogas/erp/repositories/OrderRepository.class
+com/imperiodogas/erp/dto/DashboardResponseDTO.class
 com/imperiodogas/erp/models/Inbound.class
 com/imperiodogas/erp/controllers/UserController.class
 com/imperiodogas/erp/models/OrderItem.class
@@ -29,6 +33,7 @@ com/imperiodogas/erp/dto/PersonRequestDTO.class
 com/imperiodogas/erp/controllers/PersonController.class
 com/imperiodogas/erp/models/User.class
 com/imperiodogas/erp/controllers/InboundController.class
+com/imperiodogas/erp/controllers/DashboardController.class
 com/imperiodogas/erp/models/Order.class
 com/imperiodogas/erp/services/InboundService.class
 com/imperiodogas/erp/repositories/InboundItemRepository.class

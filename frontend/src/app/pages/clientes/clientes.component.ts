@@ -13,6 +13,12 @@ interface Client {
   trade_name?: string;
   payment_deadline_days: number;
   active: boolean;
+  street?: string;
+  number?: string;
+  neighborhood?: string;
+  city?: string;
+  state?: string;
+  zip_code?: string;
   isInadimplente?: boolean;
   revenue?: number;
   purchasesCount?: number;
@@ -60,7 +66,7 @@ export class ClientesComponent implements OnInit {
 
   handleOpenNew() {
     this.editingClient.set(null);
-    this.formData = { person_type: 'PF', active: true, payment_deadline_days: 0, name: '', document: '', phone: '', trade_name: '' };
+    this.formData = { person_type: 'PF', active: true, payment_deadline_days: 0, name: '', document: '', phone: '', trade_name: '', street: '', number: '', neighborhood: '', city: '', state: '', zip_code: '' };
     this.isDialogOpen.set(true);
   }
 

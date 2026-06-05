@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { formatCurrency } from '../../utils/formatters';
 import { UserService, User } from '../../services/user.service';
@@ -12,25 +12,25 @@ import { UserService, User } from '../../services/user.service';
 export class MotoristasComponent implements OnInit {
   private readonly userService = inject(UserService);
   formatCurrency = formatCurrency;
-  period = 'Hoje';
-  loading = true;
+  period = signal('Hoje');
+  loading = signal(true);
 
-  drivers: User[] = [];
+  drivers = signal<User[]>([]);
 
   ngOnInit() {
     this.loadDrivers();
   }
 
   loadDrivers() {
-    this.loading = true;
+    this.loading.set(true);
     this.userService.getDeliverers().subscribe({
       next: (data) => {
-        this.drivers = data;
-        this.loading = false;
+        this.drivers.set(data);
+        this.loading.set(false);
       },
       error: (err) => {
         console.error('Erro ao carregar entregadores:', err);
-        this.loading = false;
+        this.loading.set(false);
       },
     });
   }

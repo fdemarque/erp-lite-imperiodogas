@@ -40,12 +40,10 @@ public class OrderService {
     public Order createFromDto(OrderRequestDTO dto) {
         Order order = new Order();
 
-        // client_id é NOT NULL no banco — lança exceção se não encontrado
-        if (dto.getClientId() == null) {
-            throw new RuntimeException("clientId é obrigatório.");
+        if (dto.getClientId() != null) {
+            order.setClient(clientRepository.findById(dto.getClientId())
+                    .orElseThrow(() -> new RuntimeException("Cliente não encontrado: " + dto.getClientId())));
         }
-        order.setClient(clientRepository.findById(dto.getClientId())
-                .orElseThrow(() -> new RuntimeException("Cliente não encontrado: " + dto.getClientId())));
 
         if (dto.getDriverId() != null) {
             order.setDeliveryDriverId(dto.getDriverId());
@@ -54,9 +52,9 @@ public class OrderService {
             order.setDeliveryAddressId(dto.getDeliveryAddressId());
         }
 
-        // sale_type é NOT NULL (ENUM sale_type: AVISTA | FIADO)
+        // sale_type é NOT NULL (ENUM sale_type: AVISTA | FIADO | CARTAO)
         if (dto.getSaleType() == null) {
-            throw new RuntimeException("saleType é obrigatório. Valores válidos: AVISTA, FIADO");
+            throw new RuntimeException("saleType é obrigatório. Valores válidos: AVISTA, FIADO, CARTAO");
         }
         order.setSaleType(dto.getSaleType());
 

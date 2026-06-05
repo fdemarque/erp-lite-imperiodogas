@@ -20,7 +20,7 @@ public class Order {
     private UUID id;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "client_id", nullable = false)
+    @JoinColumn(name = "client_id", nullable = true)
     @JsonProperty("clients")
     private Client client;
 

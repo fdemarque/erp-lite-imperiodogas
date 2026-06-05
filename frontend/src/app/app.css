@@ -1,12 +1,23 @@
-/* Active nav item: white background with orange text (matching reference exactly) */
+/* Active nav item */
 :host ::ng-deep .nav-active,
 .nav-active {
   background-color: white !important;
-  color: #EB6424 !important;
+  color: #059669 !important; /* emerald-600 */
   font-weight: 600;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
 }
 
 .nav-active svg {
-  color: #EB6424;
+  color: #059669;
+}
+
+:host-context(.dark) ::ng-deep .nav-active,
+html.dark .nav-active {
+  background-color: white !important;
+  color: #2c5f34 !important;
+  box-shadow: none;
+}
+
+html.dark .nav-active svg {
+  color: #2c5f34;
 }

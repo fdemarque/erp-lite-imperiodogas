@@ -48,6 +48,12 @@ public class ClientService {
             person.setDocument(dto.getDocument());
             person.setPhone(dto.getPhone());
             person.setTradeName(dto.getTradeName());
+            person.setStreet(dto.getStreet());
+            person.setNumber(dto.getNumber());
+            person.setNeighborhood(dto.getNeighborhood());
+            person.setCity(dto.getCity());
+            person.setState(dto.getState());
+            person.setZipCode(dto.getZipCode());
             person = personRepository.save(person);
         }
         
@@ -69,6 +75,12 @@ public class ClientService {
         if (dto.getDocument() != null) person.setDocument(dto.getDocument());
         if (dto.getPhone() != null) person.setPhone(dto.getPhone());
         if (dto.getTradeName() != null) person.setTradeName(dto.getTradeName());
+        if (dto.getStreet() != null) person.setStreet(dto.getStreet());
+        if (dto.getNumber() != null) person.setNumber(dto.getNumber());
+        if (dto.getNeighborhood() != null) person.setNeighborhood(dto.getNeighborhood());
+        if (dto.getCity() != null) person.setCity(dto.getCity());
+        if (dto.getState() != null) person.setState(dto.getState());
+        if (dto.getZipCode() != null) person.setZipCode(dto.getZipCode());
         personRepository.save(person);
 
         if (dto.getPaymentDeadlineDays() != null) {
