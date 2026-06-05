@@ -63,32 +63,56 @@
       <h3 class="text-lg font-semibold text-slate-800 m-0">Detalhamento por Entregador</h3>
       <p class="text-sm text-slate-500 mt-1 m-0">Resultados consolidados filtrados por {{ period.toLowerCase() }}.</p>
     </div>
-    <table class="w-full">
-      <thead>
-        <tr class="border-b border-slate-100">
-          <th class="text-left py-3 px-4 text-sm font-medium text-slate-500">Entregador</th>
-          <th class="text-right py-3 px-4 text-sm font-medium text-slate-500">Vendas (Qtd)</th>
-          <th class="text-right py-3 px-4 text-sm font-medium text-slate-500">Total Bruto</th>
-          <th class="text-right py-3 px-4 text-sm font-medium text-slate-500">Sangria</th>
-          <th class="text-right py-3 px-4 text-sm font-medium text-slate-500">Lucro Real</th>
-        </tr>
-      </thead>
-      <tbody>
-        @for (driver of drivers; track driver.driverId) {
-          <tr class="border-b border-slate-50 hover:bg-slate-50/50 transition-colors">
-            <td class="py-3 px-4">
-              <div class="flex items-center gap-3">
-                <div class="w-9 h-9 rounded-full bg-orange-50 text-orange-700 border border-orange-100 flex items-center justify-center font-bold text-sm">{{ getInitials(driver.driverName) }}</div>
-                <span class="font-medium text-slate-800">{{ driver.driverName }}</span>
-              </div>
-            </td>
-            <td class="py-3 px-4 text-right font-medium text-slate-700">{{ driver.cylindersSold }}</td>
-            <td class="py-3 px-4 text-right text-slate-700">{{ formatCurrency(driver.grossAmount) }}</td>
-            <td class="py-3 px-4 text-right text-orange-600 font-medium">{{ formatCurrency(driver.withdrawals) }}</td>
-            <td class="py-3 px-4 text-right font-bold text-emerald-600">{{ formatCurrency(driver.netProfit) }}</td>
+
+    @if (loading) {
+      <div class="flex items-center justify-center py-16">
+        <div class="w-8 h-8 border-4 border-orange-200 border-t-orange-500 rounded-full animate-spin"></div>
+      </div>
+    } @else if (drivers.length === 0) {
+      <div class="flex flex-col items-center justify-center py-16 text-slate-400">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 mb-3 text-slate-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M5.5 17H2v-1.5A3.5 3.5 0 015.5 12H6M16 17h5v-1.5a3.5 3.5 0 00-3.5-3.5H17M12 7a4 4 0 11-8 0 4 4 0 018 0zM20 7a4 4 0 11-8 0 4 4 0 018 0z" />
+        </svg>
+        <p class="font-medium">Nenhum entregador cadastrado</p>
+        <p class="text-sm">Acesse <strong>Usuários</strong> no menu para cadastrar entregadores.</p>
+      </div>
+    } @else {
+      <table class="w-full">
+        <thead>
+          <tr class="border-b border-slate-100">
+            <th class="text-left py-3 px-4 text-sm font-medium text-slate-500">Entregador</th>
+            <th class="text-left py-3 px-4 text-sm font-medium text-slate-500">Telefone</th>
+            <th class="text-right py-3 px-4 text-sm font-medium text-slate-500">Remuneração</th>
+            <th class="text-right py-3 px-4 text-sm font-medium text-slate-500">Vendas (Qtd)</th>
+            <th class="text-right py-3 px-4 text-sm font-medium text-slate-500">Total Bruto</th>
+            <th class="text-right py-3 px-4 text-sm font-medium text-slate-500">Sangria</th>
+            <th class="text-right py-3 px-4 text-sm font-medium text-slate-500">Lucro Real</th>
           </tr>
-        }
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          @for (driver of drivers; track driver.id) {
+            <tr class="border-b border-slate-50 hover:bg-slate-50/50 transition-colors">
+              <td class="py-3 px-4">
+                <div class="flex items-center gap-3">
+                  <div class="w-9 h-9 rounded-full bg-orange-50 text-orange-700 border border-orange-100 flex items-center justify-center font-bold text-sm">{{ getInitials(driver.person.name) }}</div>
+                  <div>
+                    <p class="font-medium text-slate-800 m-0 text-sm">{{ driver.person.name }}</p>
+                    <p class="text-xs text-slate-400 m-0">{{ driver.address || 'Sem endereço' }}</p>
+                  </div>
+                </div>
+              </td>
+              <td class="py-3 px-4 text-sm text-slate-600">{{ driver.person.phone || '—' }}</td>
+              <td class="py-3 px-4 text-right text-sm font-medium text-slate-700">
+                {{ driver.monthly_salary ? driver.monthly_salary.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) : '—' }}
+              </td>
+              <td class="py-3 px-4 text-right font-medium text-slate-700">—</td>
+              <td class="py-3 px-4 text-right text-slate-700">—</td>
+              <td class="py-3 px-4 text-right text-orange-600 font-medium">—</td>
+              <td class="py-3 px-4 text-right font-bold text-emerald-600">—</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    }
   </div>
 </div>

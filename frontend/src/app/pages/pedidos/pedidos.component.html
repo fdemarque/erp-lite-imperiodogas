@@ -1,3 +1,4 @@
+<div>
 <div class="space-y-8">
   <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
     <div>
@@ -71,6 +72,7 @@
       </tbody>
     </table>
   </div>
+</div>
 
   <!-- View Details Modal -->
   @if (viewingOrder()) {
@@ -127,14 +129,20 @@
           <div class="grid grid-cols-2 gap-4">
             <div class="space-y-2">
               <label class="text-slate-600 block font-medium text-sm">Cliente (Opcional)</label>
-              <select class="w-full h-10 rounded-lg border border-slate-300 px-3 text-sm bg-white focus:border-blue-500 focus:outline-none shadow-sm">
-                <option value="" disabled selected>Venda Avulsa</option>
+              <select class="w-full h-10 rounded-lg border border-slate-300 px-3 text-sm bg-white focus:border-blue-500 focus:outline-none shadow-sm" [(ngModel)]="newOrderPayload.clientId">
+                <option [ngValue]="null">Venda Avulsa</option>
+                @for (c of clients(); track c.id) {
+                  <option [value]="c.id">{{ c.trade_name || c.name }}</option>
+                }
               </select>
             </div>
             <div class="space-y-2">
               <label class="text-slate-600 block font-medium text-sm">Entregador</label>
-              <select class="w-full h-10 rounded-lg border border-slate-300 px-3 text-sm bg-white focus:border-blue-500 focus:outline-none shadow-sm">
-                <option value="" disabled selected>Retirada no Local</option>
+              <select class="w-full h-10 rounded-lg border border-slate-300 px-3 text-sm bg-white focus:border-blue-500 focus:outline-none shadow-sm" [(ngModel)]="newOrderPayload.driverId">
+                <option [ngValue]="null">Retirada no Local</option>
+                @for (d of deliverers(); track d.id) {
+                  <option [value]="d.id">{{ d.person.name }}</option>
+                }
               </select>
             </div>
           </div>

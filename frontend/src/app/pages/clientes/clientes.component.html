@@ -1,3 +1,4 @@
+<div>
 <div class="space-y-8">
   <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
     <div>
@@ -54,7 +55,7 @@
               <p class="text-sm text-slate-500 m-0">{{ client.document }} • {{ client.phone }}</p>
             </td>
             <td class="py-3 px-4">
-              <span class="inline-block px-2 py-0.5 rounded border border-slate-200 text-xs font-medium text-slate-600">{{ client.person_type }}</span>
+              <span class="inline-block px-2 py-0.5 rounded border border-slate-200 text-xs font-medium text-slate-600">{{ client.person_type === 'PF' ? 'Física' : 'Jurídica' }}</span>
               <div class="mt-1 text-xs text-slate-400">Prazo: {{ client.payment_deadline_days }} dias</div>
             </td>
             <td class="py-3 px-4">
@@ -82,6 +83,7 @@
       </tbody>
     </table>
   </div>
+</div>
 
   <!-- Modal -->
   @if (isDialogOpen()) {
@@ -95,8 +97,8 @@
             <div class="space-y-2">
               <label class="text-slate-600 block font-medium text-sm">Tipo de Pessoa</label>
               <select class="w-full h-10 rounded-lg border border-slate-300 px-3 text-sm" [(ngModel)]="formData.person_type">
-                <option value="FISICA">Física</option>
-                <option value="JURIDICA">Jurídica</option>
+                <option value="PF">Física</option>
+                <option value="PJ">Jurídica</option>
               </select>
             </div>
             <div class="space-y-2">
@@ -108,7 +110,7 @@
             <label class="text-slate-600 block font-medium text-sm">Nome / Razão Social</label>
             <input class="w-full h-10 rounded-lg border border-slate-300 px-3 text-sm" [(ngModel)]="formData.name" />
           </div>
-          @if (formData.person_type === 'JURIDICA') {
+          @if (formData.person_type === 'PJ') {
             <div class="space-y-2">
               <label class="text-slate-600 block font-medium text-sm">Nome Fantasia</label>
               <input class="w-full h-10 rounded-lg border border-slate-300 px-3 text-sm" [(ngModel)]="formData.trade_name" />

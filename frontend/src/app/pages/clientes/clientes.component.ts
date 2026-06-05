@@ -6,7 +6,7 @@ import { formatCurrency } from '../../utils/formatters';
 
 interface Client {
   id: string;
-  person_type: 'FISICA' | 'JURIDICA';
+  person_type: 'PF' | 'PJ';
   name: string;
   document: string;
   phone: string;
@@ -32,7 +32,7 @@ export class ClientesComponent implements OnInit {
   filterInadimplente = 'TODOS';
   isDialogOpen = signal(false);
   editingClient = signal<Client | null>(null);
-  formData: Partial<Client> = { person_type: 'FISICA', active: true, payment_deadline_days: 0 };
+  formData: Partial<Client> = { person_type: 'PF', active: true, payment_deadline_days: 0 };
 
   clients = signal<Client[]>([]);
 
@@ -60,7 +60,7 @@ export class ClientesComponent implements OnInit {
 
   handleOpenNew() {
     this.editingClient.set(null);
-    this.formData = { person_type: 'FISICA', active: true, payment_deadline_days: 0, name: '', document: '', phone: '', trade_name: '' };
+    this.formData = { person_type: 'PF', active: true, payment_deadline_days: 0, name: '', document: '', phone: '', trade_name: '' };
     this.isDialogOpen.set(true);
   }
 

@@ -2,9 +2,13 @@ package com.imperiodogas.erp.services;
 
 import com.imperiodogas.erp.dto.ClientRequestDTO;
 import com.imperiodogas.erp.models.Client;
+import com.imperiodogas.erp.models.Person;
+import com.imperiodogas.erp.models.PersonType;
 import com.imperiodogas.erp.repositories.ClientRepository;
 import com.imperiodogas.erp.repositories.PersonRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -26,31 +30,47 @@ public class ClientService {
         return repository.findById(id).orElse(null);
     }
 
+    @Transactional
     public Client createFromDto(ClientRequestDTO dto) {
         Client client = new Client();
-        if (dto.getPersonId() == null) {
-            throw new RuntimeException("person_id é obrigatório para criar um cliente.");
-        }
-        client.setPerson(personRepository.findById(dto.getPersonId())
-                .orElseThrow(() -> new RuntimeException("Pessoa não encontrada: " + dto.getPersonId())));
-        if (dto.getPaymentDeadlineDays() != null) {
-            client.setPaymentDeadlineDays(dto.getPaymentDeadlineDays());
-        }
-        if (dto.getActive() != null) {
-            client.setActive(dto.getActive());
+        
+        Person person;
+        if (dto.getPersonId() != null) {
+            person = personRepository.findById(dto.getPersonId())
+                    .orElseThrow(() -> new RuntimeException("Pessoa não encontrada: " + dto.getPersonId()));
         } else {
-            client.setActive(true); // default do banco
+            if (dto.getName() == null || dto.getName().isBlank()) {
+                throw new RuntimeException("Nome da pessoa é obrigatório para criar um cliente.");
+            }
+            person = new Person();
+            person.setName(dto.getName());
+            person.setPersonType(dto.getPersonType() != null ? dto.getPersonType() : PersonType.PF);
+            person.setDocument(dto.getDocument());
+            person.setPhone(dto.getPhone());
+            person.setTradeName(dto.getTradeName());
+            person = personRepository.save(person);
         }
+        
+        client.setPerson(person);
+        client.setPaymentDeadlineDays(dto.getPaymentDeadlineDays() != null ? dto.getPaymentDeadlineDays() : 0);
+        client.setActive(dto.getActive() != null ? dto.getActive() : true);
+        
         return repository.save(client);
     }
 
+    @Transactional
     public Client updateFromDto(UUID id, ClientRequestDTO dto) {
         Client client = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Cliente não encontrado: " + id));
-        if (dto.getPersonId() != null) {
-            client.setPerson(personRepository.findById(dto.getPersonId())
-                    .orElseThrow(() -> new RuntimeException("Pessoa não encontrada: " + dto.getPersonId())));
-        }
+        
+        Person person = client.getPerson();
+        if (dto.getName() != null) person.setName(dto.getName());
+        if (dto.getPersonType() != null) person.setPersonType(dto.getPersonType());
+        if (dto.getDocument() != null) person.setDocument(dto.getDocument());
+        if (dto.getPhone() != null) person.setPhone(dto.getPhone());
+        if (dto.getTradeName() != null) person.setTradeName(dto.getTradeName());
+        personRepository.save(person);
+
         if (dto.getPaymentDeadlineDays() != null) {
             client.setPaymentDeadlineDays(dto.getPaymentDeadlineDays());
         }
@@ -60,6 +80,7 @@ public class ClientService {
         return repository.save(client);
     }
 
+    @Transactional
     public void delete(UUID id) {
         repository.deleteById(id);
     }

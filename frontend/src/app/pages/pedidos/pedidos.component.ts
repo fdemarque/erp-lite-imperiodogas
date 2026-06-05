@@ -2,6 +2,8 @@ import { Component, signal, OnInit, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { OrderService } from '../../services/order.service';
 import { InboundService, Inbound, InboundItem } from '../../services/inbound.service';
+import { ClientService } from '../../services/client.service';
+import { UserService, User } from '../../services/user.service';
 import { formatCurrency, formatDate } from '../../utils/formatters';
 
 interface Order {
@@ -23,6 +25,8 @@ interface Order {
 export class PedidosComponent implements OnInit {
   private readonly orderService = inject(OrderService);
   private readonly inboundService = inject(InboundService);
+  private readonly clientService = inject(ClientService);
+  private readonly userService = inject(UserService);
 
   formatCurrency = formatCurrency;
   formatDate = formatDate;
@@ -33,6 +37,8 @@ export class PedidosComponent implements OnInit {
 
   orders = signal<Order[]>([]);
   filteredOrders = signal<Order[]>([]);
+  clients = signal<any[]>([]);
+  deliverers = signal<User[]>([]);
   
   // Cascade
   inbounds = signal<Inbound[]>([]);
@@ -46,6 +52,20 @@ export class PedidosComponent implements OnInit {
   ngOnInit() {
     this.loadOrders();
     this.loadInbounds();
+    this.loadClients();
+    this.loadDeliverers();
+  }
+
+  loadDeliverers() {
+    this.userService.getDeliverers().subscribe((data) => {
+      this.deliverers.set(data);
+    });
+  }
+
+  loadClients() {
+    this.clientService.getAll().subscribe((data) => {
+      this.clients.set(data);
+    });
   }
 
   openNewOrderModal() {
